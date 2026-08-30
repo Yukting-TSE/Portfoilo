@@ -1,7 +1,9 @@
+import { publicUrl } from "../lib/publicUrl";
+
 export const assets = {
   placeholders: [
-    "/images/projects/placeholder-1.svg",
-    "/images/projects/placeholder-2.svg",
-    "/images/projects/placeholder-3.svg",
+    publicUrl("images/projects/placeholder-1.svg"),
+    publicUrl("images/projects/placeholder-2.svg"),
+    publicUrl("images/projects/placeholder-3.svg"),
   ],
 };

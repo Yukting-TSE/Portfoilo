@@ -2,6 +2,8 @@
  * Central motion tokens — calibrate here, not in JSX.
  */
 
+import { publicUrl } from "../lib/publicUrl";
+
 export const MOTION_DEBUG = false;
 
 export const motion = {
@@ -50,7 +52,7 @@ export const aboutMotion = {
    */
   images: [
     {
-      src: "/images/about/big.jpg",
+      src: publicUrl("images/about/big.jpg"),
       left: 52,
       top: 52,
       /** Start lower in viewport so it rises upward into place */
@@ -63,7 +65,7 @@ export const aboutMotion = {
       visibleFromStart: true,
     },
     {
-      src: "/images/about/mid.jpg",
+      src: publicUrl("images/about/mid.jpg"),
       left: 62,
       top: 28,
       fromTop: 88,
@@ -74,7 +76,7 @@ export const aboutMotion = {
       visibleFromStart: false,
     },
     {
-      src: "/images/about/small.png",
+      src: publicUrl("images/about/small.png"),
       left: 36,
       top: 62,
       fromTop: 95,
