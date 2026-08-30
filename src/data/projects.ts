@@ -1,4 +1,6 @@
-﻿export type Project = {
+﻿import { publicUrl } from "../lib/publicUrl";
+
+export type Project = {
   id: string;
   title: string;
   challenge: string;
@@ -19,7 +21,7 @@ export type ProjectCategory = {
 
 /** Stable ASCII filenames under /public/images/projects */
 const img = (filename: string): [string, string] => {
-  const path = `/images/projects/${filename}`;
+  const path = publicUrl(`images/projects/${filename}`);
   return [path, path];
 };
 

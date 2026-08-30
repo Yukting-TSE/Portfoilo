@@ -2,7 +2,12 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
+// GitHub Pages project site: /yukting-portfolio/
+const base =
+  process.env.GITHUB_PAGES === "true" ? "/yukting-portfolio/" : "/";
+
 export default defineConfig({
+  base,
   plugins: [react(), tailwindcss()],
   server: {
     host: true,
@@ -10,8 +15,6 @@ export default defineConfig({
     strictPort: false,
     open: true,
     watch: {
-      // Don't watch large media binaries (avoids Windows EBUSY),
-      // but keep the folder visible to the static file server.
       ignored: [
         "**/*.jpg",
         "**/*.jpeg",
