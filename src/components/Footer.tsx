@@ -1,0 +1,125 @@
+import { profile } from "../data/profile";
+
+type Props = {
+  onOpenContact: () => void;
+};
+
+const footerLinks = [
+  { label: "About", href: "#about" },
+  { label: "Works", href: "#works" },
+  { label: "Contact", href: "#contact" },
+];
+
+export function Footer({ onOpenContact }: Props) {
+  const yearShort = String(new Date().getFullYear()).slice(-2);
+  const yearFull = new Date().getFullYear();
+
+  return (
+    <footer
+      id="contact"
+      className="relative z-[1] flex h-[100svh] min-h-[100svh] flex-col justify-between overflow-hidden bg-black px-[clamp(1.25rem,2.2vw,2rem)] pb-[clamp(0.85rem,1.6vw,1.35rem)] pt-[clamp(1.25rem,2.2vw,2rem)] text-white"
+    >
+      {/* Subtle dark atmosphere (hellohello uses video; keep abstract plane) */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden
+        style={{
+          background: `
+            radial-gradient(ellipse 65% 50% at 82% 40%, rgba(70,70,74,0.4) 0%, transparent 58%),
+            radial-gradient(ellipse 48% 38% at 12% 82%, rgba(48,48,52,0.35) 0%, transparent 55%),
+            linear-gradient(165deg, #0a0a0a 0%, #000 50%, #080808 100%)
+          `,
+        }}
+      />
+
+      {/* Top hairline — full width within padding */}
+      <div
+        className="pointer-events-none absolute inset-x-[clamp(1.25rem,2.2vw,2rem)] top-0 h-px bg-white"
+        aria-hidden
+      />
+
+      {/* Top: headline left + ©YY right — space-between, edge aligned */}
+      <div className="relative z-[1] flex w-full items-start justify-between gap-6 pt-1">
+        <h2 className="max-w-[14ch] font-[family-name:var(--font-display)] text-[clamp(2.75rem,7.3vw,8.7rem)] font-bold leading-[0.9] tracking-[-0.045em] text-white">
+          Let&apos;s make
+          <br />
+          something
+          <br />
+          interesting.
+        </h2>
+        <p
+          className="shrink-0 select-none self-start font-[family-name:var(--font-display)] text-[clamp(4rem,16.4vw,19.5rem)] font-bold leading-none tracking-[-0.06em] text-white"
+          aria-label={`Copyright 20${yearShort}`}
+        >
+          ©{yearShort}
+        </p>
+      </div>
+
+      {/* Bottom cluster: subline + CTA + meta (hellohello structure) */}
+      <div className="relative z-[1] flex w-full flex-col gap-[clamp(1.5rem,2.8vw,2.65rem)]">
+        <p className="font-[family-name:var(--font-display)] text-[clamp(1.15rem,2.25vw,2.7rem)] font-bold leading-[1.15] tracking-[-0.03em] text-white">
+          {profile.roles.join(" · ")}
+        </p>
+
+        <button
+          type="button"
+          onClick={onOpenContact}
+          className="group flex w-full items-center justify-between gap-4 bg-white px-[clamp(1.25rem,2.2vw,2rem)] py-[clamp(0.85rem,1.5vw,1.35rem)] text-left text-black transition-opacity duration-300 hover:opacity-90"
+        >
+          <span className="font-[family-name:var(--font-display)] text-[clamp(1.15rem,2.25vw,2.7rem)] font-bold tracking-[-0.03em]">
+            Get in touch
+          </span>
+          <span
+            className="font-[family-name:var(--font-display)] text-[clamp(1.15rem,2.25vw,2.7rem)] leading-none transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            aria-hidden
+          >
+            →
+          </span>
+        </button>
+
+        <div className="flex flex-col gap-5 font-[family-name:var(--font-display)] text-[clamp(0.7rem,0.95vw,1.05rem)] font-bold tracking-[-0.01em] text-white lg:flex-row lg:items-end lg:justify-between lg:gap-8">
+          <div className="flex flex-wrap items-end gap-x-6 gap-y-3 sm:gap-x-8">
+            <span className="select-none text-[1.05em] leading-none" aria-hidden>
+              ++
+            </span>
+            <nav className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Footer">
+              {footerLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="transition-opacity duration-200 hover:opacity-55"
+                >
+                  {link.label}
+                </a>
+              ))}
+              <a
+                href={`mailto:${profile.email}`}
+                className="transition-opacity duration-200 hover:opacity-55"
+              >
+                {profile.email}
+              </a>
+            </nav>
+          </div>
+
+          <address className="not-italic leading-[1.5]">
+            {profile.englishName}
+            <br />
+            {profile.name}
+            <br />
+            {profile.location}
+          </address>
+
+          <div className="leading-[1.5] lg:text-right">
+            <a
+              href={`tel:${profile.phone.replace(/\s/g, "")}`}
+              className="block transition-opacity duration-200 hover:opacity-55"
+            >
+              {profile.phone}
+            </a>
+            <p className="mt-0">All rights reserved ©{yearFull}</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
