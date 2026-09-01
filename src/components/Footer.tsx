@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { profile } from "../data/profile";
 
 type Props = {
@@ -5,9 +6,9 @@ type Props = {
 };
 
 const footerLinks = [
-  { label: "About", href: "#about" },
-  { label: "Works", href: "#works" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", hash: "about" },
+  { label: "Works", hash: "works" },
+  { label: "Contact", hash: "contact" },
 ];
 
 export function Footer({ onOpenContact }: Props) {
@@ -19,7 +20,6 @@ export function Footer({ onOpenContact }: Props) {
       id="contact"
       className="relative z-[1] flex h-[100svh] min-h-[100svh] flex-col justify-between overflow-hidden bg-black px-[clamp(1.25rem,2.2vw,2rem)] pb-[clamp(0.85rem,1.6vw,1.35rem)] pt-[clamp(1.25rem,2.2vw,2rem)] text-white"
     >
-      {/* Subtle dark atmosphere (hellohello uses video; keep abstract plane) */}
       <div
         className="pointer-events-none absolute inset-0"
         aria-hidden
@@ -32,13 +32,11 @@ export function Footer({ onOpenContact }: Props) {
         }}
       />
 
-      {/* Top hairline — full width within padding */}
       <div
         className="pointer-events-none absolute inset-x-[clamp(1.25rem,2.2vw,2rem)] top-0 h-px bg-white"
         aria-hidden
       />
 
-      {/* Top: headline left + ©YY right — space-between, edge aligned */}
       <div className="relative z-[1] flex w-full items-start justify-between gap-6 pt-1">
         <h2 className="max-w-[14ch] font-[family-name:var(--font-display)] text-[clamp(2.75rem,7.3vw,8.7rem)] font-bold leading-[0.9] tracking-[-0.045em] text-white">
           Let&apos;s make
@@ -55,7 +53,6 @@ export function Footer({ onOpenContact }: Props) {
         </p>
       </div>
 
-      {/* Bottom cluster: subline + CTA + meta (hellohello structure) */}
       <div className="relative z-[1] flex w-full flex-col gap-[clamp(1.5rem,2.8vw,2.65rem)]">
         <p className="font-[family-name:var(--font-display)] text-[clamp(1.15rem,2.25vw,2.7rem)] font-bold leading-[1.15] tracking-[-0.03em] text-white">
           {profile.roles.join(" · ")}
@@ -84,13 +81,13 @@ export function Footer({ onOpenContact }: Props) {
             </span>
             <nav className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Footer">
               {footerLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
+                <Link
+                  key={link.hash}
+                  to={{ pathname: "/", hash: `#${link.hash}` }}
                   className="transition-opacity duration-200 hover:opacity-55"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
               <a
                 href={`mailto:${profile.email}`}

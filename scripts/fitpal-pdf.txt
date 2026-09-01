@@ -1,0 +1,632 @@
+===== PAGE 1 =====
+FitPal: Reshape Daily Exercise Misconceptions Among Elders
+through AI Chatbot and Community-based Services
+Yuting Xie
+College of Design and Innovation,
+Tongji University
+Shanghai, China
+yukting@tongji.edu.cn
+Meiying Li
+College of Design and Innovation,
+Tongji University
+Shanghai, China
+mzlzyca@tongji.edu.cn
+Siye Zeng
+College of Design and Innovation,
+Tongji University
+Shanghai, China
+2333322@tongji.edu.cn
+Jiaqi Mo
+College of Design and Innovation,
+Tongji University
+Shanghai, China
+mojiaqi@tongji.edu.cn
+Yuting Diao
+The Future Lab, Tsinghua University
+Beijing, China
+diaoyt20@mails.tsinghua.edu.cn
+Guanhong Liu∗
+College of Design and Innovation,
+Tongji University
+Shanghai, China
+liugh23@tongji.edu.cn
+ABSTRACT
+Enhancing elderly physical health with regular exercise is key
+in aging society research. However, in the absence of scientifi-
+cally validated exercise guidelines, older adults are susceptible to
+adopting excessive or inappropriate exercise methods that may
+be detrimental to their health. In research related to the elderly’s
+exercise conceptions, the potential for community-engaged inves-
+tigations has been mentioned. However, no study has proposed
+a community-based systematic design approach to reshape these
+misconceptions. Our study closely examined six elderly individuals
+inclined to exercise near their homes to research on their perception
+on daily excercise. Then we propose a new design paradigm that
+integrates an AI Chatbot, FitPal, for personalized exercise guidance
+and community-driven incentives to correct misconceptions and
+encourage long-term adherence to exercise among elders.
+CCS CONCEPTS
+• Human-centered computing →Personal digital assistants.
+KEYWORDS
+Exercise Misconception, AI Chatbot, Elderly Physical Health, Daily
+Exercise Guidance, Community and Service System
+ACM Reference Format:
+Yuting Xie, Meiying Li, Siye Zeng, Jiaqi Mo, Yuting Diao, and Guanhong
+Liu. 2024. FitPal: Reshape Daily Exercise Misconceptions Among Elders
+through AI Chatbot and Community-based Services. In Companion of the
+2024 Computer-Supported Cooperative Work and Social Computing (CSCW
+Companion ’24), November 9–13, 2024, San Jose, Costa Rica. ACM, New York,
+NY, USA, 6 pages. https://doi.org/10.1145/3678884.3681880
+∗Corresponding author.
+Permission to make digital or hard copies of all or part of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for components of this work owned by others than the
+author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or
+republish, to post on servers or to redistribute to lists, requires prior specific permission
+and/or a fee. Request permissions from permissions@acm.org.
+CSCW Companion ’24, November 9–13, 2024, San Jose, Costa Rica
+© 2024 Copyright held by the owner/author(s). Publication rights licensed to ACM.
+ACM ISBN 979-8-4007-1114-5/24/11
+https://doi.org/10.1145/3678884.3681880
+1
+INTRODUCTION
+Elderly individuals are characterized by a high incidence of diseases,
+disability rates, and medical utilization. The health issues of the
+elderly are poised to become a grave social concern in China[37].
+Daily exercise plays a crucial role in maintaining the quality of
+life and well-being of the elderly[33]. Current research indicates
+that daily exercise can reduce all-cause mortality, lower the risk of
+certain chronic illnesses, and maintain muscle mass[15, 21, 30, 36].
+Many seniors opt for daily exercise as a means to preserve their
+health[16, 31].
+However, The elderly often engage in unscientific daily exer-
+cise due to misconception of proper techniques[10, 19, 23], which
+can be detrimental to their health[28]. They exercise according
+to their own interpretations of health, believing it enhances their
+physical condition and can treat or prevent both minor and se-
+rious illnesses.[20]. The causes of these misconceptions include
+the absence of professional daily exercise coaching[19], forgetting
+or unwillingness to adhere to medical advice[1, 9], overreliance
+on social media for health information[8], entrenched subjective
+beliefs[20], and the high cost of learning professional daily exercise
+knowledge[1].
+In the field of research on the exercise conceptions of the elderly,
+it has been noted that communities may potentially provide avenues
+for older adults to access professional sports information[19]. How-
+ever, no study has yet proposed a systematic design approach based
+on communities to reshape their misconceptions. Research[35] on
+AI chatbots that assist the elderly in acquiring health knowledge
+has demonstrated advantages in delivering specialized information
+to this demographic. The combination of community resources with
+AI chatbots holds promise for redefining the unscientific exercise
+perceptions among the elderly.
+This leads us to our research questions(RQs):
+* RQ1: What misconceptions do the elderly have about daily
+exercise?
+* RQ2: What are the opportunities community-based and AI
+chatbot integrated design paradigms can provide to reshape
+the elderly’s misconceptions about daily exercise?
+387
+
+===== PAGE 2 =====
+CSCW Companion ’24, November 9–13, 2024, San Jose, Costa Rica
+Yuting Xie et al.
+To further understand the exercise misconceptions among the
+elderly and to explore potential pathways for reshaping these mis-
+conceptions, Our approach included literature review, participatory
+observation, and in-depth interviews. Our work highlighted the
+range of misconceptions that older adults possess during daily
+exercise. These findings will direct researchers to focus on and com-
+prehend the issues surrounding exercise misconceptions among
+the elderly. Furthermore, we introduced a design paradigm that
+integrates AI chatbots with community services. This paradigm
+provides a reference and possibility for leveraging AI technology
+in community care services to guide scientific daily exercise for the
+elderly.
+2
+RELATED WORK
+2.1
+Community Support for Elderly Exercise
+Community-organized activities offer numerous benefits to the
+physical health of the elderly. These benefits include enhancing
+the enthusiasm of the elderly towards exercise[6, 13, 29], provid-
+ing positive health feedback[34], reducing their dependency on
+medications[5], and alleviating feelings of loneliness[14, 16]. Mod-
+ern communities often provide the elderly with public exercise
+facilities, group exercise activities, and exercise plans to facilitate
+their engagement in physical activities. In Wuhan, there are self-
+organized exercise organizations among the elderly to arrange and
+manage their exercise activities[26]. The Shanghai exercise and
+Medicine Integration Center offers public exercise and health ser-
+vice facilities and spaces for the elderly, conducts health education
+activities, and develops comprehensive exercise and health manage-
+ment plans[5]. However, current community activities related to
+elderly exercise still face challenges such as the lack of professional
+exercise instructors, exercise activity management talent, and in-
+sufficient promotion of the proper use of exercise equipment[7, 18].
+Therefore, we aim to leverage the advantages of communities in the
+field of elderly exercise to boost their enthusiasm for exercise and
+encourage them to engage in more scientific and healthy physical
+activities.
+2.2
+AI Support for Elderly Exercise
+The advancement of artificial intelligence (AI) technology has sig-
+nificantly benefited elderly healthcare, offering various types of
+support such as emotional companionship, therapeutic assistance,
+and medical supervision [22, 39]. AI chatbots are extensively used
+in elderly healthcare to provide companionship [2] and supervision
+[27]. For example, Miura et al. [27] designed an AI mobile chatbot
+to offer healthcare advice. Gudala et al. [11] utilized AI chatbots
+to remind elderly individuals to take their medications on time,
+thereby improving their medication adherence [24]. Additionally,
+these AI chatbots serve as a source of health knowledge for the
+elderly [35].
+In the field of elderly physical health, AI technologies also in-
+troduce new opportunities. For exercise rehabilitation, AI-assisted
+exercise programs have shown better outcomes for certain diseases
+compared to traditional methods [12, 25]. In terms of active ex-
+ercise, AI-powered smartwatch enhance exercise motivation [17].
+These devices also provide more accurate medical prescriptions
+[3, 4] and exercise feedback [38] for the elderly. However, issues of
+trust and dependency arise when the elderly use AI. Some studies
+[32] suggest improving the elderly’s acceptance of AI technology
+by addressing trust transfer and operational simplicity. We believe
+that AI technology has the potential to empower and guide the
+elderly towards a scientific understanding of exercise. Clear meth-
+ods of application are needed to provide professional and scientific
+support for elderly exercise routines.
+3
+METHOD
+In this study, we engaged with elderly residents in Shanghai com-
+munities through observation and in-depth interviews to grasp
+their perceptions of daily physical activity, the community’s influ-
+ence on their daily exercise routines, and their receptiveness to
+smart health devices.
+3.1
+Observation
+Our study involved observations of elderly individuals engaging in
+daily exercises at locations commonly frequented by this age group,
+including residential areas, parks, care centers, and nursing homes.
+We focused on the types of exercises they performed, their meth-
+ods, and their use of community exercise facilities. Additionally,
+we examined the community’s exercise atmosphere among the el-
+derly. We also conducted participatory observations to understand
+their social interactions during group activities in the community.
+Our findings were documented through photographs and video
+recordings.
+3.2
+Interview
+We initiated casual conversations with elders at exercise venues
+to identify individuals, aged 60 to 90, who regularly participate in
+daily workouts. Upon their willingness to communicate with us,
+we conducted in-depth interviews. A total of six elders participated
+in the interviews, comprising an equal number of males (n=3) and
+females (n=3). Details of these participants were summarized in
+Table 1.
+Table 1: Demographics of Participants (n=6)
+Participant
+Gender
+Age
+Excercise
+P1
+Female
+73
+Dancing
+P2
+Male
+68
+Walking
+P3
+Female
+75
+Tachi
+P4
+Male
+71
+Weightlifting
+P5
+Male
+80
+Walking
+P6
+Female
+80
+Walking
+We conducted semi-structured in-depth interviews. The inter-
+views were structured around a set of guiding questions that cov-
+ered topics such as daily exercise routines (e.g. "How do you typ-
+ically engage in exercise?" "How often and for how long do you
+exercise?"), health status (e.g. "Do you have any underlying or
+chronic diseases?"), motivation for exercising (e.g. "Why do you
+engage in physical exercise?"), views on community-based exercise
+(e.g. "Why do you prefer to exercise within the community?"), and
+acceptance of smart health devices (e.g. "Would you be willing to
+use a smartwatch to monitor your exercise data?"). Each interview
+388
+
+===== PAGE 3 =====
+FitPal: Reshape Exercise Misconceptions Among Elders
+CSCW Companion ’24, November 9–13, 2024, San Jose, Costa Rica
+Figure 1: The interaction diagram
+took approximately 20 minutes. We recorded the interviews, tran-
+scribed the recordings, and conducted a summary analysis of the
+findings.
+4
+FINDINGS
+4.1
+Exercise Misconceptions Among Elders
+4.1.1
+Preference-Based Exercise Selection and Disregarding Scien-
+tific Exercise Prescriptions. Elderly individuals often select exercises
+based on personal preferences, neglecting the diversity and suit-
+ability of exercise types. They tend to adhere to a single form of
+exercise. For instance, one participant mentioned, "As I grow older,
+I can’t do much else, so I just walk around daily" (P6), while another
+said, "I love to dance; it keeps me free of worries" (P1). They seldom
+consider their physical condition or the overall impact of their ac-
+tivities, which can lead to the overuse of certain body parts, causing
+injury and deviating from the original intention of maintaining
+health through exercise.
+Moreover, most elderly participants suffer from common health
+issues such as arthritis, periarthritis, and back pain (P2, P3, P4).
+Despite this, they often disregard medical advice when exercising
+and instead create exercise plans based on personal understanding.
+For example, one participant believed, "More exercise can cure dis-
+eases without surgery" (P3), and another mentioned, "Doing pull-ups
+can relieve back pain" (P4). This self-devised approach to exercise,
+lacking scientific support, can exacerbate health conditions. One
+participant even ignored professional guidance, stating, "The doctor
+didn’t really say anything" (P5).
+These findings show that the elderly need proper guidance and
+education to correct their exercise habits. Professional advice can
+help them exercise safely and effectively, promoting better physical
+and mental health.
+4.1.2
+Ignoring Frequency and Method of Exercise. The elderly typi-
+cally do not focus on the recommended frequency and method of
+exercise. "I can’t stay seated at home, sometimes I even walk around at
+midnight" (P2). "I injured my ligaments due to incorrect weightlifting
+posture" (P4). The overestimation of their physical capabilities can
+result in over-exercising, causing hidden physical injuries, under-
+scoring the need for tailored guidance to help the elderly balance
+their exercise routines and avoid potential harm.
+4.2
+Opportunities for Reshaping the Elderly’s
+Misconceptions about Daily Exercise
+4.2.1
+Community Engagement in Encouraging Exercise. The prox-
+imity and abundance of community exercise facilities significantly
+motivated participants to engage in physical activities. "I live nearby
+and there are plenty of facilities available, so I often come here to
+exercise" (P4). Additionally, the positive exercise atmosphere with
+in the community was highlighted, "The dance environment here
+is fantastic, making it easy to make many friends" (P1). In such a
+conducive environment, the elderly are more inclined to actively
+participate in the daily excercise. Many elderly actively invite oth-
+ers to join their exercise routines, providing mutual guidance and
+fostering a supportive atmosphere. Community volunteers promote
+scientifically effective ways of exercising, offering healthier options.
+4.2.2
+Acceptance of Smart Health Devices Among the Elderly. Our
+research indicates that the majority of elderly individuals are famil-
+iar with using smartphones and proficient in basic functions such
+as making calls and using WeChat. Participant P3 mentioned, "I
+often use my phone to chat with friends," while P1 stated, "I enjoy
+watching dance videos shared by others." Some elderly individuals
+also express keen interest in health data, such as the WeChat step
+analyzer. When asked about health monitoring devices like smart-
+watches, most elderly participants showed no resistance. Given the
+acceptance and interest among the elderly, we believe that smart
+health devices should be further utilized to help them accurately
+assess their health status and cultivate healthy exercise habits.
+389
+
+===== PAGE 4 =====
+CSCW Companion ’24, November 9–13, 2024, San Jose, Costa Rica
+Yuting Xie et al.
+Figure 2: FitPal System prototype; (a)Prompt Management for Chatbot Guidance; (b)(c)(d)(e) Example screenshots of the chatbot
+guidance for communication with the elderly
+5
+DESIGN
+5.1
+Design Goals
+To foster scientific exercise among the elderly, we established three
+design objectives to guide our design process: First, our design
+should convey scientific exercise knowledge in a manner that is
+easily acceptable to the elderly, aiding them in understanding the
+importance of scientific exercise. This understanding is intended to
+correct their previous misconceptions and encourage more active
+participation in scientific exercise routines. Second, professional
+medical institutions should be involved to provide scientifically
+tailored exercise prescriptions based on the physical condition of the
+elderly. The system should guide the elderly in exercising according
+to these prescriptions, while continuously monitoring their exercise
+behavior to help them achieve a healthy physical state through
+scientific exercise. Third, the system should motivate the elderly
+to engage in scientific exercise, maintaining their enthusiasm and
+initiative for long-term scientific exercise.
+5.2
+System Design
+Based on the aforementioned goals, we propose the following ser-
+vice system. The details of the system diagram are summarized in
+Figure 1. Our system consists of three main components: User Side,
+Server Side, and Community Side.
+User Side includes the elderly, a fitness wristband, and an AI
+chatbot. The elderly are required to wear the fitness wristband in
+their daily lives to collect exercise data. The AI chatbot, named
+FitPal, interacts with the elderly via the WeChat platform on their
+mobile phones. The interactions include disseminating scientific
+exercise knowledge, delivering exercise prescriptions, providing
+feedback, and offering encouragement. FitPal, combining the mean-
+ings of "Fit" and "Pal," represents a fitness partner designed to help
+the elderly maintain a healthy, active lifestyle.
+Community Side comprises community organizations, govern-
+ment, medical institutions, and volunteers. The community collab-
+orates with medical institutions to obtain health assessments and
+exercise prescriptions for the elderly. The government provides
+funding for material rewards such as food, fitness equipment, and
+daily necessities. Volunteers manage and distribute these rewards
+to the elderly who engage in scientific exercise, motivating them
+to maintain healthy exercise habits.
+Server Side is primarily responsible for receiving, processing,
+and transmitting data. The server establishes a database based on
+healthcare data, professional exercise prescriptions, and the initial
+physical data of the elderly. It receives daily exercise data from the
+fitness wristbands, updating the database accordingly. The server
+transmits these resources to FitPal to be used as dialogue material.
+Additionally, the elderly’s exercise data is sent to the community,
+facilitating the community’s health management efforts.
+Further details of the system will be elaborated in the following
+sections.
+5.2.1
+AI-Enhanced User Interaction. We have designed a clear seam-
+less interaction process to help elderly individuals maintain enthusi-
+asm for exercise. We guide the elderly in scientific exercise through
+FitPal, a personable voice chatbot. FitPal conveys scientific exercise
+knowledge to the elderly, addresses their questions, and corrects
+their misconceptions through voice interaction during exercise. It
+also provides feedback on the scientific validity of the elderly’s
+exercise afterward. FitPal uses GPT-4 and prompt engineering to
+function as a query interface to the exercise prescription database
+for the elderly. The system retrieves data on daily physical activity
+and exercise prescriptions using Retrieval Augmented Generation
+(RAG) for information indexing. The results, including answers
+to questions, recommendations for diverse exercise methods, and
+feedback on the scientific level of exercise, are communicated to
+the elderly in an understandable manner via mobile devices. FitPal
+intergrates customizable AI voice libraries to meet the social needs
+of the elderly.Details of FitPal System prototype were summarized
+in Figure 2.
+5.2.2
+Data Processing Section. We use exercise smartwatch as data
+collection endpoint. These devices gather data on exercise dura-
+tion, heart rate, steps, speed, and other related metrics. This data is
+collected through built-in gyroscopes, heart rate sensors, accelerom-
+eters, GPS modules and so on. The data collected by the smartwatch
+are transmitted to mobile app front-ends via Bluetooth Low Energy
+(BLE) APIs. The backend server collects this data to establish an
+exercise prescription Q&A database, which includes initial physical
+390
+
+===== PAGE 5 =====
+FitPal: Reshape Exercise Misconceptions Among Elders
+CSCW Companion ’24, November 9–13, 2024, San Jose, Costa Rica
+data of the elderly and prescriptions from medical professionals.
+The exercise data is compared with database information to deter-
+mine the scientific level of exercise, which is quantified and ranked
+on a mobile backend leaderboard.
+5.2.3
+Community Service Endpoint. Community eldercare service
+center staff promote the importance of scientific exercise to the
+elderly through posters and community events, encouraging them
+to participate scientifically in daily exercises. The community col-
+laborates with medical institutions to assess the elderly’s physical
+form, fitness, and health status. Based on these assessments, medical
+experts create personalized exercise prescriptions. Social workers
+introduce the functions and usage of smartwatch, including how to
+wear, activate, and monitor exercise intensity, and assist the elderly
+in adding FitPal on WeChat. The community establishes a scientific
+exercise ranking list based on the exercise prescription database,
+rewarding top performers with government-provided food, fitness
+equipment, and daily necessities. The community offers consulta-
+tion and advice services. If users encounter any issues while using
+the chatbot, such as unclear content, they can promptly provide
+feedback to the community volunteers.By enhancing the health
+level of the elderly through scientific exercise, the burden on com-
+munity eldercare service centers is reduced, decreasing government
+expenditures on elderly care and promoting a sustainable cycle of
+eldercare services.
+6
+LIMITATIONS
+In this study, we employed a qualitative research method by con-
+ducting in-depth interviews with six elderly individuals to explore
+their perceptions of daily exercise. While this approach is valu-
+able for gaining a deep understanding of the specific needs and
+experiences of older adults, the small sample size and the focus on
+particular individuals limit the generalizability and broad applica-
+bility of our findings. Consequently, our study results may not fully
+represent the perspectives and experiences of the wider elderly
+population. Future research should aim to increase the sample size
+and include a more diverse group of participants to enhance the
+reliability and generalizability of the research conclusions.
+Furthermore, despite current technological advancements, there
+remains a possibility that AI systems could produce inappropriate or
+erroneous outputs, which may negatively impact user experience. In
+future work, we plan to improve the AI chatbot, FitPal, by leveraging
+more advanced language models and optimized prompts to mitigate
+the risk of generating unsuitable content and to better cater to the
+needs of elderly users.
+7
+CONCLUSION
+In this study, we have identified misconceptions among the elderly
+regarding their choice of exercise, such as selecting types of exercise
+based solely on personal preferences, disregarding the scientific
+planning of exercise frequency and methods, and not following
+doctors’ exercise recommendations. These behaviors could lead to
+an increased risk of health issues. Consequently, we have proposed a
+design solution that integrates an AI Chatbot excercise partner and
+community support, aimed at transforming the elderly’s exercise
+perceptions and encouraging the adoption of scientific exercise
+methods. This initiative is designed to enhance their health levels
+and alleviate the pressures on community eldercare service centers.
+Our proposed solution holds promise for promoting the health and
+well-being of the elderly and fostering the sustainable development
+of eldercare services.
+REFERENCES
+[1] Kristina Åhlund, Birgitta Öberg, Niklas Ekerstad, and Maria Bäck. 2020. A balance
+between meaningfulness and risk of harm–frail elderly patients’ perceptions of
+physical activity and exercise–an interview study. BMC geriatrics 20 (2020), 1–9.
+[2] Abeer Alessa and Hend Al-Khalifa. 2023. Towards designing a ChatGPT conver-
+sational companion for elderly people. In Proceedings of the 16th International
+Conference on PErvasive Technologies Related to Assistive Environments. 667–674.
+[3] Hung-Kai Chen, Fueng-Ho Chen, and Shien-Fong Lin. 2021. An ai-based exercise
+prescription recommendation system. Applied Sciences 11, 6 (2021), 2661.
+[4] Ismail Dergaa, Helmi Ben Saad, Abdelfatteh El Omri, Jordan Glenn, Cain Clark,
+Jad Washif, Noomen Guelmami, Omar Hammouda, Ramzi Al-Horani, Luis
+Reynoso-Sánchez, et al. 2023. Using artificial intelligence for exercise prescription
+in personalised health promotion: A critical evaluation of OpenAI’s GPT-4 model.
+Biology of Sport 41, 2 (2023), 221–241.
+[5] Yunxia Ding, Ling Lu, and Hailong Wang. 2021. Research on the Construction
+Status and Smart Application of the Community Elderly" Physical and Medical
+Integration" Center——Based on the Typical Case of the Community Elderly"
+Physical and Medical Integration" Center in Yinhang Street, Shanghai. In 2021
+International Conference on Information Technology and Contemporary Sports
+(TCS). IEEE, 578–583.
+[6] Clare Farrance, Fotini Tsofliou, and Carol Clark. 2016. Adherence to community
+based group exercise interventions for older people: A mixed-methods systematic
+review. Preventive Medicine 87 (2016), 155–166.
+[7] Hong Fu. 2013. Impacts of community sports station on the sports activities of
+elderly people. Applied Mechanics and Materials 380 (2013), 4868–4871.
+[8] Liping Fu and Yu Xie. 2021. The effects of social media use on the health of older
+adults: An empirical analysis based on 2017 Chinese general social survey. In
+Healthcare, Vol. 9. MDPI, 1143.
+[9] Walid F Gellad, Jerry L Grenard, and Zachary A Marcum. 2011. A systematic
+review of barriers to medication adherence in the elderly: looking beyond cost
+and regimen complexity. The American journal of geriatric pharmacotherapy 9, 1
+(2011), 11–23.
+[10] Ashley Gluchowski, Helena Bilsborough, Jane Mcdermott, Helen Hawley-Hague,
+and Chris Todd. 2022. ‘A Lot of People Just Go for Walks, and Don’t Do Anything
+Else’: Older Adults in the UK Are Not Aware of the Strength Component Embed-
+ded in the Chief Medical Officers’ Physical Activity Guidelines—A Qualitative
+Study. International journal of environmental research and public health 19, 16
+(2022), 10002.
+[11] Meghana Gudala, Mary Ellen Trail Ross, Sunitha Mogalla, Mandi Lyons, Padma-
+vathy Ramaswamy, Kirk Roberts, et al. 2022. Benefits of, barriers to, and needs
+for an artificial intelligence–powered medication information voice chatbot for
+older adults: Interview study with geriatrics experts. JMIR aging 5, 2 (2022),
+e32169.
+[12] Shichun He, Meiqi Wei, Deyu Meng, Ziyi Wang, Guang Yang, and Ziheng Wang.
+2024. Self-determined sequence exercise program for elderly with sarcopenia: A
+Randomized controlled trial with clinical assistance from explainable artificial
+intelligence. Archives of Gerontology and Geriatrics 119 (2024), 105317.
+[13] Nidia A Hernandes, Vanessa S Probst, Rubens A Da Silva Jr, Renata SB Januário,
+Fabio Pitta, and Denilson C Teixeira. 2013. Physical activity in daily life in physi-
+cally independent elderly participating in community-based exercise program.
+Brazilian Journal of Physical Therapy 17 (2013), 57–63.
+[14] Jiyoung Hwang, Lisa Wang, Jodi Siever, Talia Del Medico, and Charlotte A Jones.
+2019. Loneliness and social isolation among older adults in a community exercise
+program: a qualitative study. Aging & mental health 23, 6 (2019), 736–742.
+[15] Katsuya Iijima, Satoshi Iimuro, Tomohiro Shinozaki, Yasuo Ohashi, Takashi
+Sakurai, Hiroyuki Umegaki, Atsushi Araki, Yasuyoshi Ouchi, Hideki Ito, and
+Japanese Elderly Diabetes Intervention Trial Investigator Group. 2012. Lower
+physical activity is a strong predictor of cardiovascular events in elderly patients
+with type 2 diabetes mellitus beyond traditional risk factors: the Japanese Elderly
+Diabetes Intervention Trial. Geriatrics & Gerontology International 12 (2012),
+77–87.
+[16] Clare Killingback, Fotini Tsofliou, and Carol Clark. 2017. Older people’s adherence
+to community-based group exercise programmes: a multiple-case study. BMC
+public health 17 (2017), 1–12.
+[17] Cheuk Kei Lao, Bing Long Wang, Richard S Wang, and Hsiao Yun Chang. 2021.
+The combined effects of sports smart bracelet and multi-component exercise
+program on exercise motivation among the elderly in Macau. Medicina 57, 1
+(2021), 34.
+[18] Caihui Liu and Zhaofa Zhang. 2016. Research on the model of physical fitness
+and community sports of the elderly based on internet of things. Revista Ibérica
+391
+
+===== PAGE 6 =====
+CSCW Companion ’24, November 9–13, 2024, San Jose, Costa Rica
+Yuting Xie et al.
+de Sistemas e Tecnologias de Informação E8 (2016), 187.
+[19] Yanhong Liu, Sihui Yu, Jiayi Ruan, and Jun Yuan. 2023. Research on Smartiza-
+tion Upgrade Strategies of Public Sports Services for the Elderly in Shenzhen
+Community. In Proceedings of the 2nd International Conference on Public Manage-
+ment, Digital Economy and Internet Technology, ICPDI 2023, September 1–3, 2023,
+Chongqing, China.
+[20] Zhenmi Liu, Shaun Speed, and Kinta Beaver. 2015. Perceptions and attitudes
+towards exercise among C hinese elders–the implications of culturally based
+self-management strategies for effective health-related help seeking and person-
+centred care. Health Expectations 18, 2 (2015), 262–272.
+[21] Teresa Liu-Ambrose, Cindy K Barha, and John R Best. 2018. Physical activity for
+brain health in older adults. Applied Physiology, Nutrition, and Metabolism 43, 11
+(2018), 1105–1112.
+[22] Bingxin Ma, Jin Yang, Frances Kam Yuet Wong, Arkers Kwan Ching Wong,
+Tingting Ma, Jianan Meng, Yue Zhao, Yaogang Wang, and Qi Lu. 2023. Artificial
+intelligence in elderly healthcare: A scoping review. Ageing Research Reviews 83
+(2023), 101808.
+[23] Todd M Manini, Marvin Druger, and Lori Ploutz-Snyder. 2005. Misconceptions
+about strength exercise among older adults. Journal of Aging and Physical Activity
+13, 4 (2005), 422–433.
+[24] Niharika Mathur, Kunal Dhodapkar, Tamara Zubatiy, Jiachen Li, Brian Jones,
+and Elizabeth Mynatt. 2022. A collaborative approach to support medication
+management in older adults with mild cognitive impairment using conversa-
+tional assistants (CAs). In Proceedings of the 24th International ACM SIGACCESS
+Conference on Computers and Accessibility. 1–14.
+[25] Deyu Meng, Hongzhi Guo, Siyu Liang, Zhibo Tian, Ran Wang, Guang Yang,
+and Ziheng Wang. 2022. Effectiveness of a hybrid exercise program on the
+physical abilities of frail elderly and explainable artificial-intelligence-based
+clinical assistance. International Journal of Environmental Research and Public
+Health 19, 12 (2022), 6988.
+[26] Zhongqi Mi. 2021. Research on the Construction of Public Service System of
+Elderly Sports in Wuhan Community. In 2021 2nd Asia-Pacific Conference on
+Image Processing, Electronics and Computers. 754–757.
+[27] Chisaki Miura, Sinan Chen, Sachio Saiki, Masahide Nakamura, and Kiyoshi
+Yasuda. 2022. Assisting personalized healthcare of elderly people: Developing a
+rule-based virtual caregiver system using mobile chatbot. Sensors 22, 10 (2022),
+3829.
+[28] American College of Sports Medicine et al. 2013. ACSM’s guidelines for exercise
+testing and prescription. Lippincott williams & wilkins.
+[29] Jessica O’Brien, Amy Mason, Marica Cassarino, Jason Chan, and Annalisa Setti.
+2021. Older Women’s experiences of a community-led walking Programme using
+activity trackers. International journal of environmental research and public health
+18, 18 (2021), 9818.
+[30] A Pinto, D Di Raimondo, A Tuttolomondo, C Buttà, G Milio, and G Licata. 2012.
+Effects of physical exercise on inflammatory markers of atherosclerosis. Current
+pharmaceutical design 18, 28 (2012), 4326–4349.
+[31] Atiya A Shaikh and Sukanya P Dandekar. 2019. Perceived benefits and barriers
+to exercise among physically active and non-active elderly people. Disability,
+CBR & Inclusive Development 30, 2 (2019), 73–83.
+[32] Mahmud Akhter Shareef, Vinod Kumar, Yogesh K Dwivedi, Uma Kumar, Muham-
+mad Shakaib Akram, and Ramakrishnan Raman. 2021. A new health care system
+enabled by machine intelligence: Elderly people’s trust or losing self control.
+Technological Forecasting and Social Change 162 (2021), 120334.
+[33] Didi Suryadi, Nugroho Susanto, Eva Faridah, Ribut Wahidi, Y Touvan Juni
+Samodra, Ahmad Nasrulloh, Mikkey Anggara Suganda, Isti Dwi Puspita Wati,
+Albadi Sinulingga, Novita Intan Arovah, et al. 2024. Exercise for health in old
+age: Comprehensive review examining the benefits and efficacy of interventions.
+Retos: nuevas tendencias en educación física, deporte y recreación 55 (2024), 88–98.
+[34] Tsai-Hsuan Tsai, Alice May-Kuen Wong, Chien-Lung Hsu, and Kevin C Tseng.
+2013. Research on a community-based platform for promoting health and physical
+fitness in the elderly community. PLoS One 8, 2 (2013), e57452.
+[35] Wang-Chin Tsai, Yu-Chen Hsieh, and Chang-Franw Lee. 2021. Exploring Effec-
+tiveness of Absorbing Health Knowledge by the Middle-Aged and Elderly Using
+Chatbots. In HCI International 2021-Late Breaking Papers: Cognition, Inclusion,
+Learning, and Culture: 23rd HCI International Conference, HCII 2021, Virtual Event,
+July 24–29, 2021, Proceedings 23. Springer, 318–329.
+[36] Kazumune Ueshima, Kazuko Ishikawa-Takata, Takashi Yorifuji, Etsuji Suzuki,
+Saori Kashima, Soshi Takao, Masumi Sugiyama, Toshiki Ohta, and Hiroyuki Doi.
+2010. Physical activity and mortality risk in the Japanese elderly: a cohort study.
+American journal of preventive medicine 38, 4 (2010), 410–418.
+[37] Zhankun Wang and Guojiang Wei. 2022. Effects of Sports Public Goods on the
+Health of the Elderly: Empirical Evidence from China. Social Work in Public
+Health 37, 4 (2022), 370–380.
+[38] David C Wong, Siobhan O’Connor, and Emma Stanmore. 2023. The application of
+artificial intelligence in digital physical activity and falls prevention interventions
+for older adults. Journal of aging and physical activity 31, 5 (2023), 887–889.
+[39] Betelhem Zewdu Wubineh, Fitsum Gizachew Deriba, and Michael Melese Wold-
+eyohannis. 2023. Exploring the opportunities and challenges of implementing
+artificial intelligence in healthcare: A systematic literature review. In Urologic
+Oncology: Seminars and Original Investigations. Elsevier.
+392
+

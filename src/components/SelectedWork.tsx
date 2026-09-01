@@ -1,6 +1,6 @@
 import { animate } from "animejs";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { categories, projectPath, type Project } from "../data/projects";
 import { useInView } from "../hooks/useInView";
 import { motion } from "../motion/motionConfig";
@@ -70,7 +70,15 @@ export function SelectedWork() {
             <a
               key={cat.id}
               href={`#cat-${cat.id}`}
-              onClick={() => setActive(cat.id)}
+              onClick={(e) => {
+                e.preventDefault();
+                setActive(cat.id);
+                const el = document.getElementById(`cat-${cat.id}`);
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth", block: "start" });
+                  window.history.replaceState(null, "", `#cat-${cat.id}`);
+                }
+              }}
               className={`group relative shrink-0 whitespace-nowrap py-1.5 text-[0.95rem] tracking-[0.02em] transition-all duration-300 ${
                 active === cat.id
                   ? "translate-x-0 text-[var(--fg)] lg:translate-x-1"
@@ -95,11 +103,10 @@ export function SelectedWork() {
         {categories.map((cat) => (
           <section
             key={cat.id}
-            id={`cat-${cat.id}`}
             data-cat={cat.id}
-            className="works-cat scroll-mt-28 mt-16 border-t border-[var(--line)] pt-16 first:mt-0 first:border-t-0 first:pt-0 sm:mt-24 sm:pt-20 lg:scroll-mt-32 lg:mt-36 lg:pt-28 lg:first:mt-0 lg:first:pt-0"
+            className="works-cat mt-16 border-t border-[var(--line)] pt-16 first:mt-0 first:border-t-0 first:pt-0 sm:mt-24 sm:pt-20 lg:mt-36 lg:pt-28 lg:first:mt-0 lg:first:pt-0"
           >
-            <CategoryHeading label={cat.label} />
+            <CategoryHeading id={`cat-${cat.id}`} label={cat.label} />
 
             <div className="flex flex-col gap-20 lg:gap-28">
               {cat.projects.map((project) => (
@@ -113,13 +120,28 @@ export function SelectedWork() {
   );
 }
 
-function CategoryHeading({ label }: { label: string }) {
+function CategoryHeading({ id, label }: { id: string; label: string }) {
+  const { hash } = useLocation();
+  const hashTarget =
+    hash === `#${id}` || hash.replace(/^#/, "") === id;
   const { ref, inView } = useInView<HTMLHeadingElement>({ threshold: 0.35 });
-  const played = useRef(false);
+  const played = useRef(hashTarget);
+  // First category used to land correctly with larger offset; others need
+  // a bit more room under the fixed nav so the title sits lower.
+  const scrollMt =
+    id === "cat-hci"
+      ? "scroll-mt-28 lg:scroll-mt-32"
+      : "scroll-mt-16 lg:scroll-mt-20";
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || !inView || played.current) return;
+    if (!el || !inView || played.current) {
+      if (el && hashTarget) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      }
+      return;
+    }
     played.current = true;
 
     const reduced = window.matchMedia(
@@ -137,13 +159,14 @@ function CategoryHeading({ label }: { label: string }) {
       duration: motion.slow,
       ease: "inOutCubic",
     });
-  }, [inView, ref]);
+  }, [inView, ref, hashTarget]);
 
   return (
     <h2
+      id={id}
       ref={ref}
-      className="mb-14 font-[family-name:var(--font-display)] text-[clamp(2.5rem,5.5vw,4rem)] font-bold leading-[0.95] tracking-[-0.045em] text-[var(--fg)] lg:mb-20"
-      style={{ opacity: 0 }}
+      className={`mb-14 font-[family-name:var(--font-display)] text-[clamp(2.5rem,5.5vw,4rem)] font-bold leading-[0.95] tracking-[-0.045em] text-[var(--fg)] lg:mb-20 ${scrollMt}`}
+      style={{ opacity: hashTarget ? 1 : 0 }}
     >
       {label}
     </h2>

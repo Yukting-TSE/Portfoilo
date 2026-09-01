@@ -33,9 +33,10 @@ export const motion = {
  */
 export const aboutMotion = {
   trackVh: 420,
+  /** Phone only — shorter pin before Works */
+  trackVhMobile: 220,
 
   stages: {
-    /** Big image grows from already-visible start → rest */
     bigIn: { start: 0, end: 0.22 },
     leftType: 0.24,
     midIn: { start: 0.38, end: 0.54 },
@@ -43,37 +44,44 @@ export const aboutMotion = {
     rightType: 0.78,
   },
 
+  /** Phone: finish all images, then type copy */
+  stagesMobile: {
+    bigIn: { start: 0, end: 0.22 },
+    midIn: { start: 0.28, end: 0.48 },
+    smallIn: { start: 0.52, end: 0.72 },
+    leftType: 0.78,
+    rightType: 0.86,
+  },
+
   typeSpeed: 22,
 
-  /**
-   * Layout in % of pin viewport.
-   * Big starts visible under the title at fromScale / fromTop,
-   * then eases to width / top at scale 1.
-   */
+  /** Phone layout only below this width; iPad uses desktop */
+  mobileMaxWidth: 767,
+
   images: [
     {
       src: publicUrl("images/about/big.jpg"),
       left: 52,
       top: 52,
-      /** Start lower in viewport so it rises upward into place */
       fromTop: 92,
       width: 28.6,
       aspect: 3 / 4,
       fromScale: 0.58,
       tone: "#e8e4de",
-      /** Already peeking from below when title shows */
       visibleFromStart: true,
+      mobile: { left: 52, top: 36, fromTop: 88, width: 56 },
     },
     {
       src: publicUrl("images/about/mid.jpg"),
-      left: 62,
-      top: 28,
+      left: 68,
+      top: 37,
       fromTop: 88,
-      width: 15,
+      width: 12.75,
       aspect: 4 / 3,
       fromScale: 0.55,
       tone: "#d4cfc7",
       visibleFromStart: false,
+      mobile: { left: 70, top: 48, fromTop: 92, width: 36.8 },
     },
     {
       src: publicUrl("images/about/small.png"),
@@ -85,6 +93,7 @@ export const aboutMotion = {
       fromScale: 0.55,
       tone: "#f0ebe4",
       visibleFromStart: false,
+      mobile: { left: 28, top: 58, fromTop: 90, width: 14.4 },
     },
   ] as const,
 } as const;

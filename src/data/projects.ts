@@ -1,4 +1,11 @@
-﻿import { publicUrl } from "../lib/publicUrl";
+import { publicUrl } from "../lib/publicUrl";
+import type { ProjectDetail } from "./projectDetail";
+import { aiAgentDetail } from "./projects/ai-agent";
+import { chartLearningDetail } from "./projects/chart-learning";
+import { fitpalDetail } from "./projects/fitpal";
+import { humanZipDetail } from "./projects/human-zip";
+import { icmdDetail } from "./projects/icmd";
+import { pagodaDetail } from "./projects/pagoda";
 
 export type Project = {
   id: string;
@@ -11,6 +18,7 @@ export type Project = {
   impact: string;
   images: [string, string];
   href?: string;
+  detail?: ProjectDetail;
 };
 
 export type ProjectCategory = {
@@ -37,6 +45,36 @@ export function findProject(id: string) {
   return null;
 }
 
+/** icmd-style Case Study detail; uses rich `detail` when present. */
+export function caseDetailFor(project: Project): ProjectDetail {
+  if (project.detail) return project.detail;
+
+  return {
+    cover: {
+      src: project.images[0],
+      alt: project.title,
+    },
+    eyebrow: "Case Study",
+    meta: [
+      { label: "Role", value: project.role },
+      { label: "Keyword", value: project.method },
+      { label: "Time", value: project.time },
+    ],
+    lead: [project.challenge, project.approach],
+    sections: [
+      {
+        type: "part",
+        number: "01",
+        title: "Impact",
+      },
+      {
+        type: "prose",
+        paragraphs: [project.impact],
+      },
+    ],
+  };
+}
+
 export const categories: ProjectCategory[] = [
   {
     id: "hci",
@@ -50,12 +88,13 @@ export const categories: ProjectCategory[] = [
           "老年群体在日常运动中常存在错误认知与信息鸿沟，缺乏可持续、可信赖的指导与社区支持，健康行为难以长期维系。",
         approach:
           "结合 AI 聊天机器人与社区化服务，重塑老年人对日常运动的理解，提供可对话、可协作的健康支持体验。",
-        time: "CSCW Poster 2024",
+        time: "2024",
         role: "第一作者 · Yuting Xie 等",
         method: "AI Chatbot · 社区服务设计 · CSCW 研究",
         impact:
           "第一作者发表于 CSCW Companion '24（DOI: 10.1145/3678884.3681880）。",
         images: img("fitpal.jpg"),
+        detail: fitpalDetail,
       },
       {
         id: "ai-agent-research",
@@ -65,12 +104,13 @@ export const categories: ProjectCategory[] = [
           "用户研究中的角色分析与洞察提炼耗时，设计师创造力的激发高度依赖经验与协作质量，流程难以规模化。",
         approach:
           "引入 AI Agent 协助用户研究，通过协作式角色分析支持设计师发现机会点并激发创意。",
-        time: "HCII 2025 Full Paper",
+        time: "2024-2025",
         role: "共一作者 · Yuting Xie, Sijia Yang & Ningzi Chen",
         method: "AI Agent · 用户研究 · 协作式角色分析",
         impact:
           "共一作者发表于 HCII 2025 Full Paper（DOI: 10.1007/978-3-031-93415-5_14）。",
         images: img("ai-agent.png"),
+        detail: aiAgentDetail,
       },
       {
         id: "chart-learning",
@@ -80,12 +120,13 @@ export const categories: ProjectCategory[] = [
           "数字金融让服务更便捷，但许多潜在投资者缺乏金融素养。图表本可成为教育工具，却常因低信噪比、透明度不足与适应性弱，难以在真实投资过程中支持知识获取与决策；数字投资平台的易用性与用户理解力之间仍有显著差距。",
         approach:
           "设计面向实时投教的交互式图表学习工具：以生成式 AI 即时解读金融图表，结合交互式学习界面与多模型知识图谱，把投资学习嵌回决策现场，让用户从被动接收者变为主动建构者。",
-        time: "研究项目 · UIST Adjunct '25",
+        time: "2024-2025",
         role: "共同设计 / 交互设计研究 · 谢玉婷；李美莹；凌珑；盘家喻",
         method: "生成式 AI · 交互式图表学习 · 多模态知识图谱 · 金融教育",
         impact:
           "以大数据分析系统技术在金融投教中的交互创新为研究基础，成果发表于 UIST Adjunct '25（DOI: 10.1145/3746058.3758384）。",
         images: img("chart-learning.jpg"),
+        detail: chartLearningDetail,
       },
       {
         id: "icmd",
@@ -100,6 +141,7 @@ export const categories: ProjectCategory[] = [
         impact:
           "提出智能配件游戏化交互路径，重塑人与日常智能物件之间的具身联系，提升设备使用率与沉浸体验。",
         images: img("icmd.png"),
+        detail: icmdDetail,
       },
       {
         id: "pagoda",
@@ -108,11 +150,12 @@ export const categories: ProjectCategory[] = [
           "古佛塔是重要文化遗产，却面临风雨侵蚀与城市更新的双重威胁；类型、材料、年代等信息分散，缺乏系统的数字化呈现与可读路径。",
         approach:
           "整理 1400+ 条古塔信息，按形制、材料与时间分类，以信息可视化与交互设计呈现中国现存古塔建筑样式。",
-        time: "课程 / 研究设计",
+        time: "2021",
         role: "共同设计 · 谢玉婷；张璇",
-        method: "信息可视化 · 文化遗产数字化 · 交互叙事",
+        method: "信息可视化交互 · 文化遗产数字化",
         impact: "形成可检索、可阅读的古塔样式分析与可视化成果。",
         images: img("pagoda.png"),
+        detail: pagodaDetail,
       },
     ],
   },
@@ -133,6 +176,7 @@ export const categories: ProjectCategory[] = [
         impact:
           "以论文《Human.zip: Ego Compression in Digital Culture》与 AutoSkin 展览回应数字身份议题。",
         images: img("human-zip.jpg"),
+        detail: humanZipDetail,
       },
       {
         id: "forest-theatre",

@@ -1,0 +1,710 @@
+pages 17 via pypdf
+
+===== PAGE 1 =====
+AI Agent Assist User Research: Collaborative 
+Role Analysis to Inspire Designer Creativity 
+Y uting Xie1(B) , Sijia Y ang2 , and Ningzi Chen 2 
+1 College of Design and Innovation, Tongji University, Shanghai, China 
+yukting@tongji.edu.cn 
+2 Shanghai International College of Design and Innovation, Tongji University, Shanghai, China 
+Abstract. Human-Centered Design (HCD) emphasizes user-centric research but 
+faces inefﬁciencies and subjectivity in traditional methods. While AI enhances 
+data processing in early and late research stages, existing tools remain passive, 
+lacking real-time collaboration during interviews. This study explores AI’s active 
+role in HCD through three questions: integrating AI into workﬂows, enhancing 
+creativity, and deﬁning human-AI collaboration models. Semi-structured inter-
+views with 12 researchers across industries highlight gaps in real-time interaction, 
+insight depth, and multimodal data integration. Key design requirements include 
+improving communication, data quality, analytical efﬁciency, and research trans-
+lation. Participants expect AI agents to automate processes, support decisions, and 
+adapt to domains. We propose Co-Researcher, an AI framework enabling real-time 
+transcription, dynamic questioning, and contextual analysis. The system fosters 
+co-creative interviews, with AI suggesting follow-ups and generating structured 
+reports. Results show Co-Researcher reduces manual tasks and deepens insights, 
+positioning AI as a collaborative partner rather than a tool. This work advances 
+human-AI collaboration in HCD, balancing automation with creativity and rigor, 
+while addressing cross-functional alignment and methodological challenges. 
+Keywords: User Research · Human-AI Collaboration · Co-creative 
+1 Introduction 
+Human-Centered Design (HCD) [38, 39] emphasizes user needs, experiences, and expec-
+tations, placing the user voice at the core of the design process to ensure alignment with 
+actual demands. Unlike the “Technology Push” approach, HCD requires designers to 
+integrate qualitative and quantitative research, continuously gathering user feedback to 
+reﬁne design directions [ 2, 10]. 
+However, current user research faces challenges such as high costs, low efﬁciency, 
+and excessive subjectivity [ 34– 36]. With advancements in artiﬁcial intelligence (AI), 
+language models like GPT4.0 have improved data processing efﬁciency, reducing time 
+and labor costs [12, 15, 37]. AI, through natural language processing (NLP) and sentiment 
+analysis, can automatically analyze user feedback, aiding designers in understanding 
+user needs [ 48]. Y et, existing AI tools primarily support the early and late stages of
+© The Author(s), under exclusive license to Springer Nature Switzerland AG 2025 
+H. Degen and S. Ntoa (Eds.): HCII 2025, LNAI 15820, pp. 234–250, 2025. 
+https://doi.org/10.1007/978-3-031-93415-5_14 
+===== PAGE 2 =====
+AI Agent Assist User Research: Collaborative Role Analysis to Inspire 235
+research, offering limited assistance during the research process itself [9, 23]. Moreover, 
+HCD emphasizes co-creation, involving designers, users, and multiple stakeholders [41]. 
+Current AI tools are not tailored for user research, leading to suboptimal user experiences 
+[11, 18] and an overreliance on designers’ subjective judgment, potentially causing 
+inconsistencies in research outcomes [ 13, 25]. 
+The creative potential of AI in design has also drawn attention [ 44]. Accord-
+ing to Generative Contrast Theory, creativity often emerges from diverse cognitive 
+paths and contrasts. AI, by analyzing vast datasets, generates unconventional ideas 
+that expand designers’ cognitive boundaries [ 33]. Additionally, AI can enhance design-
+ers’ metacognitive abilities, improving creativity quality [ 45]. However, the prevailing 
+human-dominated, AI-assisted model remains linear, overlooking AI’s autonomy and 
+collaborative potential in creative processes [ 27, 34]. 
+To date, no research has explored AI’s real-time involvement in HCD user research. 
+This study addresses the following research questions: 
+RQ1: How can AI be integrated into the HCD user research process? 
+RQ2: How can AI enhance designers’ creativity and optimize research workﬂows? 
+RQ3: What is the ideal collaboration model between humans and AI? 
+2 Related Work 
+2.1 Design and User Research: Process and Roles 
+Human-centered design emphasizes understanding user perspectives to generate effec-
+tive solutions. Norman (2002) highlights the role of empathy in shaping user-oriented 
+design strategies [ 8]. Brown (2009) further asserts that user research is integral to cre-
+ative design, guiding solutions through deep analysis of user needs, behaviors, and 
+emotions [41]. 
+Methodologically, Buchanan (2001) regards user research as a sub-design process, 
+with the Double Diamond model providing a structured framework [12, 15]. This model, 
+deﬁned by the Design Council (2005), consists of discovery, deﬁnition, development, 
+and delivery phases, where user research is critical in the ﬁrst two stages. Effective 
+user research requires both divergent and convergent thinking, involving skills such as 
+creativity, empathy, critical thinking, data analysis, and communication [ 6, 11]. 
+The user research process typically includes deﬁning interview objectives, planning, 
+execution, data recording, and analysis (Snyder, 2003) [ 50]. Creativity plays a role at 
+each stage: brainstorming interview questions, adapting during interviews, and deriv-
+ing insights from data. Patton (2002) emphasizes that creativity extends beyond idea 
+generation to pattern recognition and extracting meaningful insights from user feedback 
+[51]. Kuniavsky (2003) underscores that user research creativity manifests in designing 
+interview questions, data collection, and translating complex behaviors into actionable 
+design insights [52]. 
+However, traditional methods such as interviews, observations, and surveys remain 
+labor-intensive and inefﬁcient, especially in dynamic design environments (Kuniavsky, 
+2003) [2, 14, 52].
+===== PAGE 3 =====
+236 Y . Xie et al.
+2.2 Applications of AI in User Research 
+AI has been increasingly applied to user research, signiﬁcantly improving efﬁciency and 
+depth of analysis. 
+Problem Identiﬁcation. AI aids in identifying patterns and problems, traditionally 
+reliant on researcher expertise. Brynjolfsson and McAfee (2014) suggest AI-driven 
+processes enhance data-driven decision-making [ 53]. ChatGPT leverages text mining 
+and semantic analysis to extract recurring themes and pain points from vast datasets, 
+assisting designers in uncovering latent needs [ 10, 19]. Brainstorm Buddy [ 55] facili-
+tates AI-driven brainstorming by generating user personas and reﬁning key questions. 
+Shmueli (2010) notes that AI predictive analysis can preemptively identify emerging 
+trends, providing designers with proactive insights [ 8, 23, 54]. 
+Data Analysis and Synthesis. AI also excels in post-research data processing. Tools 
+like Tencent Meeting Assistant [56] analyze meeting content and participant sentiment, 
+while Feishu Miaoji automates transcription and key point extraction, aiding rapid data 
+organization [ 57]. Davenport (2018) explores generative AI’s role in simulating user 
+scenarios and generating design concepts [ 58]. GAN-based tools can create user per-
+sonas and hypothetical scenarios, broadening the scope of design exploration [ 3, 19]. 
+Additionally, AI-driven concept similarity generation expands creative possibilities for 
+designers [5, 8]. 
+AI-Driven Real-Time Collaboration. AI fosters real-time collaboration in user 
+research. McCormack et al. (2020) demonstrate AI’s ability to co-create with human 
+users in dynamic, interactive processes [ 49]. NLP and speech recognition technolo-
+gies enhance real-time feedback analysis. Predictive models identify latent user needs, 
+particularly in personalized services and product design [ 10, 25]. Platforms like IBM 
+Watson and Google Cloud NLP use sentiment analysis and topic extraction to quickly 
+highlight key user feedback insights, improving analytical depth and efﬁciency [ 24, 27]. 
+Recent advancements have introduced AI agents into user research. Kusal (2022) demon-
+strates how conversational AI integrates contextual awareness, emotions, and sentiment 
+to simulate human behavior, improving designers’ understanding of user needs [ 59]. 
+Despite AI’s potential, existing studies predominantly focus on post-research data 
+processing. The role of AI agents in active collaboration during user research remains 
+underexplored, presenting opportunities for further innovation. 
+3M e t h o d 
+3.1 User Research Interview 
+This study employs semi-structured interviews as the primary research method to gather 
+insights into participants’ experiences with user research processes and the potential 
+role of AI agents in enhancing creativity. The semi-structured approach enables in-
+depth discussions while allowing ﬂexibility for participants to share insights beyond 
+predeﬁned questions.
+===== PAGE 4 =====
+AI Agent Assist User Research: Collaborative Role Analysis to Inspire 237
+A total of 12 participants with varying levels of experience in user research were 
+selected, ranging from undergraduate students to seasoned professionals across diverse 
+industries, including mobile systems, service design, game development, and UX/UI 
+design. The recruitment process began with an open call on the Chinese social media 
+platform Red Note, where designers actively engage in discussions on professional top-
+ics. From an initial pool of 30 applicants with at least 2–3 years of HCD research expe-
+rience, 12 participants were chosen to ensure diversity in design domains, professional 
+backgrounds, and demographic attributes. 
+Among them, ﬁve participants were current students, providing academic perspec-
+tives, while seven were professional user researchers, contributing practical insights. 
+This composition enabled a comprehensive and multidimensional examination of AI’s 
+role in user research. 
+To analyze participant diversity, we categorized them into ﬁve groups based on 
+project experience and domain relevance (Fig. 1). 
+Fig. 1. Interviewee Classiﬁcation Matrix. 
+Group 1: Senior User Researchers (Psychology/Software Engineering Perspective): 
+P5 (senior user researcher in a mobile company): Provided expertise on user research 
+across the product lifecycle, from ideation to post-launch evaluation; P10 (psychologist 
+with interdisciplinary user research experience): Offered psychological insights into user 
+behavior and AI’s role in interpreting user feedback. 
+Group 2: Senior User Researchers (Design/Business Perspective): P11 (industrial 
+designer turned UX researcher): Discussed the role of user research in translating user
+===== PAGE 5 =====
+238 Y . Xie et al.
+needs into design concepts; P12 (experienced UX researcher): Explored AI’s integration 
+within research tools, assessing both potential and limitations. 
+Group 3: Experienced User Researchers (Design Theory Perspective): P4 (UX 
+researcher with an anthropology background): Highlighted the signiﬁcance of qualita-
+tive and usability research across different stages; P8 (recent social sciences graduate): 
+Shared insights on the intersection of user research and social impact. 
+Group 4: Current Design Students (Cross-Industry Perspective): P6 (service opera-
+tions role, new to the ﬁeld): Focused on data analysis and customer feedback in service 
+design; P7 (UX researcher in gaming): Provided perspectives on AI’s role in fostering 
+creativity in a competitive industry. 
+Group 5: User Researchers with Project Experience (Cross-Industry Perspective): 
+P1 (third-year product design student): Offered insights into early-stage user research 
+in design education; P2 (industrial design graduate student): Contributed an academic 
+perspective on UX research; P3 (service design graduate student): Highlighted mixed-
+method approaches in service design research; P9 (specialized in service design and 
+social innovation): Discussed the integration of user research into broader societal 
+challenges. Subsequent paragraphs, however, are indented. 
+3.2 Interview Structure 
+To explore AI’s potential in supporting user research, we conducted semi-structured 
+interviews, each lasting 1–2 h. Participants were asked the following questions: 
+Q1: Can you brieﬂy describe your typical user research process? What are the key 
+objectives at each stage? 
+Q2: What types of information are most critical in your research? How do you 
+differentiate between qualitative and quantitative data? 
+Q3: Beyond interviewees, which other roles (e.g., domain experts) are crucial in 
+supporting user research? Why? 
+Q4: Have you used AI tools in user research? If so, in which stages were they 
+beneﬁcial, and what were the outcomes? 
+Q5: What are the main challenges you encounter in user research? In what ways do 
+you think AI could help? 
+Q6: If you could design an ideal AI-assisted tool for user research, what key features 
+and functionalities would you expect? 
+This structured yet ﬂexible interview approach allowed us to gain a deeper under-
+standing of the research landscape and the potential integration of AI agents into design 
+revision tools. 
+4 Findings 
+4.1 Existing User Research Collaboration Models 
+Based on semi-structured interviews with 12 user researchers, we identiﬁed the current 
+workﬂow of AI-assisted user research (Figure X), which is structured into three phases: 
+interview preparation, conducting interviews, and post-interview analysis. Across these 
+phases, the agent, user researcher, and interviewee assume distinct roles and engage in 
+speciﬁc collaborative actions.
+===== PAGE 6 =====
+AI Agent Assist User Research: Collaborative Role Analysis to Inspire 239
+Characteristics of AI-Assisted Workﬂows AI. a) The Role of AI Agents: AI primarily 
+assists in generating plans and optimizing recruitment strategies during the preparation 
+phase. However, a collaboration gap exists between AI and user researchers during 
+interview execution. In the post-interview phase, AI supports data processing, insight 
+generation, and optimization recommendations. b) The Dominance of User Researchers: 
+Researchers retain control over planning, execution, and adaptation, while AI serves as 
+an auxiliary tool. c) Interviewee Participation: Interviewees provide core feedback during 
+the interview phase and contribute to post-interview validation when necessary. 
+Identiﬁed Gaps in Current AI-Assisted Workﬂows. a) Limited Deep Collaboration 
+Capabilities: Existing AI agents function as unidirectional tools, lacking the capacity for 
+cross-functional co-creation or conﬂict resolution (e.g., P6 highlighted interdepartmen-
+tal data access issues). Additionally, AI is not involved in real-time interactions during 
+interviews but instead analyzes interview records only after their completion. b) Insuf-
+ﬁcient Credibility and Depth of Insight Generation: AI-generated conclusions are often 
+superﬁcial statistical summaries, lacking contextual adaptation (e.g., P10 noted limita-
+tions in sentiment analysis tools). c) Inadequate Multimodal Data Integration: Current AI 
+implementations fail to integrate multimodal inputs such as voice, behavior, and facial 
+expressions, limiting the comprehensiveness of insights (P12, P7). 
+4.2 Existing User Research Collaboration Models 
+User researchers navigate complex cross-team collaborations and face multiple chal-
+lenges, from requirement clariﬁcation to data analysis and research outcome translation. 
+Based on interview data, we categorized key pain points into four dimensions: ambiguous 
+requirements and communication gaps, participant recruitment and data quality bottle-
+necks, inefﬁciencies in analysis and insight extraction, and barriers to research-to-design 
+translation. These challenges inform core design requirements (DRs) for future AI tools 
+(Table 1). 
+Across the user research workﬂow, challenges arise in requirement communication, 
+participant recruitment, data processing, and insight implementation. Future AI tools 
+should extend beyond data processing to address demand clariﬁcation, cross-team com-
+munication, intelligent data analysis, and knowledge management, thereby enhancing 
+research efﬁciency and impact. 
+4.3 Design Expectations for AI Agents in User Research 
+Based on interview analyses, we distilled key user expectations for AI agents in user 
+research into four core dimensions: process automation, intelligent decision support, 
+cross-role collaboration, and privacy control and domain specialization (Table 2). 
+The core design requirements (DRs) in current workﬂows emphasize clarity in 
+requirement articulation, data quality, and research-to-design translation. Meanwhile, 
+user expectations (DEs) for AI agents focus on automation, intelligence, and domain 
+adaptation. While participants from different ﬁelds (e.g., psychology expert P10 vs. gam-
+ing researcher P7) exhibit varying needs, a shared expectation remains: AI should serve 
+as an assistive rather than a replacement tool, enhancing user research comprehensively 
+while maintaining control and interpretability.
+===== PAGE 7 =====
+240 Y . Xie et al.
+Table 1. Design Requirement (DR). 
+Design Requirement (DR) Challenges Description 
+DR1: Requirement Clarity and 
+Communication Efﬁciency 
+DR1.1 Clariﬁcation of Ambiguous 
+Requests 
+DR1.2 Cross-Department Collaboration 
+Barriers 
+Product and business teams frequently 
+propose vague or broad research questions 
+(P5, P11). Structured communication 
+(e.g., requirement submission templates, 
+interview-based conﬁrmations) is needed 
+to reﬁne research goals and user targeting 
+Information asymmetry between 
+designers, product managers, and 
+researchers (P6, P12) necessitates 
+standardized workﬂows (e.g., alignment 
+meetings) to reduce redundant 
+communication 
+DR2: Participant Recruitment and 
+Data Quality 
+DR2.1 Sampling Challenges 
+DR2.2 Data Bias Risks 
+Recruiting niche user segments (e.g., 
+high-end customers, rare-use-case 
+participants) is time-consuming and costly 
+(P3, P7) 
+Issues such as misleading responses (P3) 
+and illogical survey structures (P7) 
+undermine data reliability, necessitating 
+enhanced data cleansing and layered 
+analysis (e.g., cross-validation as 
+suggested by P7) 
+DR3: Analysis and Insight 
+Efﬁciency 
+DR3.1 Time-Consuming Qualitative 
+Data Processing 
+DR3.2 Limitations of Quantitative 
+Analysis Tools 
+Tasks such as interview transcription, text 
+annotation, and afﬁnity diagramming 
+require substantial manual effort (P1, P8) 
+Traditional statistical tools (e.g., SPSS) 
+lack ﬂexibility for complex scenarios (e.g., 
+gaming user behavior analysis), requiring 
+programming support (Python/R) for 
+enhanced adaptability (P5, P7) 
+DR4: Research Outcome 
+Translation and Implementation 
+DR4.1 Misalignment Between Insights 
+and Design 
+DR4.2 Low Report Reusability 
+Designers may overlook business 
+constraints (e.g., P5 mentioned "overly 
+conceptual designs"), necessitating 
+workshops (P2) or actionable 
+recommendations (P4) to bridge the gap 
+Historical data is often unstructured (P6), 
+making it difﬁcult to generate adaptive 
+reports efﬁciently 
+5 Design Result 
+5.1 Human-AI Collaboration Framework for HCD User Research 
+To meet design requirements and facilitate an ideal model for user research and AI 
+collaboration, we propose an active AI-assisted human-AI collaboration framework for 
+user research implementation (Fig. 2). 
+In the current linear collaboration between humans and AI, the user researcher ini-
+tiates the process by providing the AI agent with requirements, triggering the agent 
+to analyze existing data, generate, and optimize content. The human then veriﬁes and 
+plans the interview based on AI-generated content. During the interview implementa-
+tion, the process remains human-driven, with AI only responsible for recording and
+===== PAGE 8 =====
+AI Agent Assist User Research: Collaborative Role Analysis to Inspire 241
+Table 2. Design Expectation (DE). 
+Design Expectation (DE) Application Description 
+DE1: Process Automation DE1.1 Automated 
+Transcription and Data 
+Cleaning 
+DE1.2 Structured Report 
+Generation 
+Automates repetitive tasks such as 
+interview transcription, survey 
+cleaning (P8, P10), and sentiment 
+analysis (P9) 
+Generates preliminary reports 
+based on templates (P6, P12) and 
+supports rapid adjustments (e.g., 
+"lightweight testing tools" 
+mentioned by P11) 
+DE2: Intelligent Decision 
+Support 
+DE2.1 Real-Time Interview 
+Probing Suggestions 
+DE2.2 Virtual User 
+Simulation 
+Guides researchers during 
+interviews by suggesting 
+follow-up questions to prevent 
+missing key insights (P3, A3) 
+Creates simulated personas (e.g., 
+elderly users, gamers) for 
+pre-validation of research 
+hypotheses (P2, P6, P11) 
+DE3: Cross-Role 
+Collaboration Support 
+DE3.1 Multi-Role Interaction 
+Simulation 
+DE3.2 Knowledge Base 
+Integration 
+Facilitates interactions with 
+virtual experts, designers, or users 
+to stimulate creativity (e.g., "AI 
+town" concept mentioned by P12) 
+Links historical research data and 
+industry reports (P6), offering 
+structured research frameworks 
+(e.g., P4 referenced the "Jobs to 
+Be Done" model) 
+DE4: Privacy Control DE4.1 Local Deployment 
+DE4.2 Controlled Output 
+Ensures security for sensitive 
+data, such as gaming user 
+behavior insights (P7, P12) 
+Restricts AI’s generative 
+autonomy (P7) and ensures 
+traceable conclusions (P3) 
+DE5: Domain 
+Specialization 
+DE5.1 Industry-Speciﬁc 
+Adaptation 
+Customizes AI capabilities for 
+vertical industries such as 
+healthcare and gaming (P4, P7) 
+post-interview collation, summarization, and optimization, supplementing the knowl-
+edge gathered by the human. Here, AI plays a passive role, only executing tasks when 
+directed by the human to reduce repetitive labor, functioning as a copilot. 
+In the ideal scenario of interactive human-AI cooperation, AI acts as a co-researcher, 
+joining the research process and collaborating with humans in executing the study. Rather 
+than passively providing content, AI actively contributes to stimulating human creativity. 
+During the interview preparation stage, AI analyzes the background and data, generating
+===== PAGE 9 =====
+242 Y . Xie et al.
+Fig. 2. Human-AI Collaboration Framework. 
+and optimizing relevant content to form a pre-interview library in collaboration with the 
+user researcher. During the interview itself, AI functions as an active participant, tracking 
+the dialogue in real time, and automatically suggesting interview questions based on 
+the library. The human, after thoughtful consideration, is responsible for asking and 
+engaging with the interviewee, with the questions co-created by both the human and AI. 
+After the interview, AI utilizes the collaborative content from the previous stages to help 
+the researcher summarize and generate insights. 
+Fig. 3. Design requirements (DR) and design expectations (DW) derived. 
+Based on the design requirements (DR) and design expectations (DW) derived from 
+the interview summary, we have developed the AI agent prototype, Co-Researcher, with 
+the functionality modules illustrated in Fig. 3. These functionalities enable AI to assist 
+designers in implementing user research, signiﬁcantly enhancing the research experience 
+and outcomes. The functionalities are realized in the AI Co-Researcher proof of concept 
+(POC), with a focus on user interface design, which will be discussed in further detail 
+in the following sections.
+===== PAGE 10 =====
+AI Agent Assist User Research: Collaborative Role Analysis to Inspire 243
+5.2 User Interaction Prototype of Co-researcher 
+To enhance the collaborative efﬁciency between designers and artiﬁcial intelligence 
+(AI) agents, this study presents the development of an interactive prototype called Co-
+Researcher. The system is designed to optimize the interview recording, analysis, and 
+feedback processes, aiming to improve the quality and efﬁciency of research work while 
+assisting designers in thoroughly exploring user needs. Co-Researcher’s user interface 
+integrates high-precision speech-to-text technology, an AI-assisted question-generation 
+system, and automated content organization tools. (Fig. 4). 
+Fig. 4. User Interaction Prototype. 
+F1: Real-time Speech-to-Text Recording. Co-Researcher employs high-precision 
+speech recognition technology to transcribe spoken content into a structured verba-
+tim transcript in real time. This feature not only enhances recording efﬁciency but also 
+minimizes human error, ensuring the completeness and traceability of interview content. 
+F2: AI Proactive Questioning Aids. The system is equipped with an intelligent Dia-
+logue component, allowing researchers to interact with the AI agent to generate more 
+targeted questions. The AI analyzes respondents’ answers in real time and automatically 
+generates follow-up questions to deepen the interview dialogue, ensuring continuity 
+while helping to uncover latent user needs. 
+F3: Real-time Annotation and Extraction. Researchers can annotate the transcript in 
+real time, highlighting and extracting key content. This functionality streamlines infor-
+mation extraction, reducing redundant communication among team members caused by 
+information discrepancies (Fig. 5). 
+Co-Researcher divides the interview process into three main stages: preparation, 
+interview, and data analysis. Each stage is focused on improving efﬁciency and reducing 
+information gaps, ensuring that the research is completed effectively and accurately.
+===== PAGE 11 =====
+244 Y . Xie et al.
+Fig. 5. User Flow. 
+Preparation. Researchers ﬁrst gather research requirements and develop an interview 
+outline. Co-Researcher assists researchers in optimizing the sequence and phrasing of 
+questions through interaction with the AI agent, ensuring the comprehensiveness and 
+speciﬁcity of the questions. This process not only improves the accuracy of the interview 
+outline but also guarantees the coherence of subsequent interviews. Finally, all questions 
+are input into the database, forming a structured interview guide that provides a clear 
+framework for the interview process. 
+Interview. Co-Researcher transcribes the interview content in real time through high-
+precision speech recognition technology and automatically generates a structured 
+transcript. This function signiﬁcantly improves recording efﬁciency, reduces human 
+errors, and ensures the integrity and traceability of the interview content. Additionally, 
+researchers can annotate the transcript in real time to extract key information, thereby 
+avoiding redundant labor and information gaps in future communication. 
+A key feature of the system is the built-in intelligent Dialogue component, which 
+enables the AI agent to actively participate in the interview. By analyzing the respon-
+dent’s answers in real time, the AI generates follow-up questions, extending the depth of 
+the conversation. This not only enhances the continuity of the interview but also allows 
+researchers to delve deeper into latent user needs, ensuring a seamless interview process. 
+Moreover, if researchers encounter unclear areas or need additional background informa-
+tion, the AI agent can provide relevant answers, further enhancing the comprehensiveness 
+of the interview. 
+Data Analysis. After the interview, the system uses the automated content organization 
+tools to summarize the collected data and generate easily analyzable reports. Researchers 
+can quickly extract valuable insights from the structured information, facilitating further 
+analysis. 
+Co-Researcher greatly improves the efﬁciency of interviews, reduces duplication 
+of efforts and communication barriers through efﬁcient voice transcription, intelligent 
+questioning, real-time annotation, and ultimately provides strong support for research 
+work.
+===== PAGE 12 =====
+AI Agent Assist User Research: Collaborative Role Analysis to Inspire 245
+5.3 System Design 
+This study presents the design and implementation of a comprehensive multimodal data 
+processing and user interaction system, structured to support research tasks efﬁciently. 
+The system adopts a modular architecture, encompassing four sequential stages—Input, 
+Encoding, Processing, and Output—to facilitate data collection, analysis, and visualiza-
+tion. The core objective is to transform raw multimodal data into high-value insights 
+and present them through an intuitive and interactive interface, thereby enhancing the 
+efﬁciency of User research. (Fig. 6). 
+Fig. 6. Pipeline. 
+Input. The system’s frontend is developed using React, which manages user interactions 
+and task assignments while seamlessly integrating with a Flask backend via API calls. 
+Real-time audio input is captured through WebRTC, enabling speech recording and 
+multimodal data acquisition relevant to the research topic. Additionally, the system 
+incorporates LLMLingua to support multilingual processing, ensuring compatibility 
+across diverse linguistic environments. To enhance usability, a task reminder mechanism 
+is embedded within the interface, guiding users through the data collection process 
+efﬁciently. 
+Encoding. The encoding phase focuses on text preprocessing, transformation, and fea-
+ture extraction. Raw audio data undergoes transcription via OpenAI Whisper, generat-
+ing textual content alongside timestamps and conﬁdence scores. The system employs 
+Pandas for structured data organization, facilitating subsequent computational anal-
+ysis. Further, BERT is utilized for text embedding, converting textual information 
+into high-dimensional vector representations. These embeddings are processed through 
+MLP/SVM classiﬁers, applying Softmax to compute probability distributions and gen-
+erate classiﬁcation results with enhanced accuracy. By structuring and ﬁltering data 
+effectively, this stage ensures a robust foundation for downstream analytical tasks.
+===== PAGE 13 =====
+246 Y . Xie et al.
+Processing. In the processing stage, GPT-4.0 is leveraged for advanced text analysis 
+and summarization. Through deep semantic parsing, the system identiﬁes latent patterns 
+in textual data and extracts key insights. Depending on the research context, the system 
+generates analytical reports, data visualizations, and exploratory questions to aid inter-
+pretability. Furthermore, GPT-4.0 collaborates with Midjourney for image generation, 
+providing supplementary visual materials that enrich the research output. 
+Output. The ﬁnal output stage delivers structured data visualization and an optimized 
+interaction experience. The frontend interface, powered by React, incorporates Uizard, 
+ensuring improved readability and aesthetics. The system generates various visualization 
+outputs, including mind maps, statistical graphs, and interactive dashboards, built upon 
+dynamic frameworks to facilitate real-time exploration. Additionally, a user feedback 
+mechanism allows for iterative reﬁnements of the system, continuously enhancing its 
+analytical performance and usability in research scenarios. 
+6 Discussion 
+In recent advancements in human-AI collaboration, the focus has shifted from AI as a 
+mere tool to a more collaborative and creative agent. However, existing human-computer 
+interaction (HCI) frameworks often limit AI’s role to supporting tasks, primarily per-
+forming repetitive work that substitutes human effort. In creative domains, AI tends to 
+passively mimic human creativity during the generation process. The question of how 
+AI, with its distinct creativity, can actively engage in human-driven creative processes, 
+facilitating co-creation, remains an underexplored topic. 
+Within the context of Human-Centered Design (HCD) user research, we propose 
+a framework for real-time human-AI collaboration. The AI co-researcher, an example 
+within this framework, demonstrated an enhancement in both designer experience and 
+creativity. AI, in this context, assumes a more active role in collaboration, not merely as a 
+tool but as a creative partner. Our research provides insights for future design directions 
+in AI-powered tools. 
+6.1 AI’s Role in Collaborative Creation 
+As discussed earlier, AI can stimulate human creativity in various ways during co-
+creation: offering unexpected ideas, enhancing designers’ metacognitive skills, and gen-
+erating collective intelligence. We identify three speciﬁc roles of AI as a co-researcher: 
+AI as an expert, AI as a team member, and AI as an insight proposer. These roles high-
+light the diverse ways AI can inspire creativity by complementing human abilities in 
+ways that are both fundamentally distinct and mutually enriching. AI introduces eas-
+ily digestible external knowledge, which designers can absorb as collective insights, 
+and it also offers novel interpretations of existing content, providing fresh perspectives 
+that inspire individual creativity. These two modes of AI collaboration often coexist. In 
+design, real-time adjustments should be made based on the context to meet user needs, 
+such as allowing designers to personalize AI parameters.
+===== PAGE 14 =====
+AI Agent Assist User Research: Collaborative Role Analysis to Inspire 247
+6.2 Limitations and Future Work 
+Despite the promising results, our study has certain limitations. One key challenge lies 
+in addressing empathy and cultural differences, which are not strengths of AI. Currently, 
+human researchers are best suited to address these aspects, but synchronizing AI outputs 
+with these insights—ensuring that AI does not lose subtle but important nuances— 
+remains a signiﬁcant hurdle. Additionally, users have expressed concerns about data 
+privacy, particularly in commercial environments where strict conﬁdentiality is empha-
+sized. These ethical and regulatory concerns must be addressed to make AI tools more 
+compliant with privacy standards. 
+Looking ahead, there is potential for further reﬁnement. AI’s real-time, proactive 
+involvement in user research could extend beyond asking interview questions and associ-
+ating background knowledge. With advancements in agent technology, AI could include 
+emotional recognition and become more attuned to users’ needs, thus fostering deeper 
+collaboration. Furthermore, this research opens up broader discussions, such as how AI 
+can take an active role in creative processes. For AI to be proactive, it must collect a wide 
+range of information, including implicit and environmental data, to provide real-time 
+outputs (e.g., listening to interview dialogues). The integration of ambient intelligence 
+(AmI) and ubiquitous intelligence could unlock vast possibilities for AI to exercise 
+creativity, requiring further exploration [65]. 
+6.3 Conclusion 
+This study highlights the collaborative creativity between humans and AI in HCD user 
+research. Through formative research, we developed a design framework and require-
+ments to guide the development of AI tools that facilitate active, real-time collabo-
+ration. The AI co-researcher, based on this framework, was evaluated against passive 
+AI-human collaboration tools. The results demonstrated that the AI co-researcher sig-
+niﬁcantly enhanced creativity and provided valuable insights for future AI-driven tools. 
+This work emphasizes the potential of AI agents to augment creativity and efﬁciency 
+in user research workﬂows. While challenges remain, such as data overload and AI’s 
+lack of empathy, integrating AI in ways that complement human insight and creativity 
+can signiﬁcantly advance the ﬁeld. Future research should focus on reﬁning human-AI 
+collaboration models and enhancing the adaptability of AI tools to speciﬁc user research 
+needs. 
+References 
+1. Durante, Z., Huang, Q., Wake, N., Gong, R., Park, J.S., Sarkar, B., et al.: Agent AI: surveying 
+the horizons of multimodal interaction. arXiv preprint arXiv:2401.03568 (2024) 
+2. Sreenivasan, A., Suresh, M.: Design thinking and artiﬁcial intelligence: a systematic literature 
+review exploring synergies. Int. J. Innov. Stud. (2024) 
+3. Figoli, F.A., Rampino, L., Mattioli, F.: AI in design idea development: a workshop on creativity 
+and human-AI collaboration. Proc. DRS, 1–17 (2022) 
+4. Furtado, L.S., Soares, J.B., Furtado, V .: A task-oriented framework for generative AI in design. 
+J. Creat. 34(2), 100086 (2024)
+===== PAGE 15 =====
+248 Y . Xie et al.
+5. Kim, J., Maher, M.L.: The effect of AI-based inspiration on human design ideation. Int. J. 
+Des. Creat. Innov. 11(2), 81–98 (2023) 
+6. Feng, K.K., Coppock, M.J., McDonald, D.W.: How do UX practitioners communicate AI as 
+a design material? artifacts, conceptions, and propositions. In: Proceedings of the 2023 ACM 
+Designing Interactive Systems Conference, pp. 2263–2280 (2023) 
+7. Feng, K.K., McDonald, D.W.: Addressing UX practitioners’ challenges in designing 
+ML applications: an interactive machine learning approach. In: Proceedings of the 28th 
+International Conference on Intelligent User Interfaces, pp. 337–352 (2023) 
+8. Shi, Y ., Gao, T., Jiao, X., Cao, N.: Understanding design collaboration between designers 
+and artiﬁcial intelligence: a systematic literature review. Proc. ACM Hum.-Comput. Interact. 
+7(CSCW2), 1–35 (2023) 
+9. Lu, Y ., Zhang, C., Zhang, I., Li, T.J.J.: Bridging the Gap between UX Practitioners’ work 
+practices and AI-enabled design support tools. In: CHI Conference on Human Factors in 
+Computing Systems Extended Abstracts, pp. 1–7 (2022) 
+10. Rezwana, J., Maher, M.L.: Designing creative AI partners with COFI: a framework for model-
+ing interaction in human-AI co-creative systems. ACM Trans. Comput.-Hum. Interact. 30(5), 
+1–28 (2023) 
+11. Gmeiner, F., Y ang, H., Y ao, L., Holstein, K., Martelaro, N.: Exploring challenges and opportu-
+nities to support designers in learning to co-create with AI-based manufacturing design tools. 
+In: Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems, 
+pp. 1–20 (2023) 
+12. Knearem, T., Khwaja, M., Gao, Y ., Bentley, F., Kliman-Silver, C.E.: Exploring the future of 
+design tooling: The role of artiﬁcial intelligence in tools for user experience professionals. In: 
+Extended Abstracts of the 2023 CHI Conference on Human Factors in Computing Systems, 
+pp. 1–6 (2023) 
+13. Ahmad, S.F., et al.: Impact of artiﬁcial intelligence on human loss in decision making, laziness, 
+and safety in education. Hum. Soc. Sci. Commun. 10(1), 1–14 (2023) 
+14. Dzindolet, M.T., Peterson, S.A., Pomranky, R.A., Pierce, L.G., Beck, H.P .: The role of trust 
+in automation reliance. Int. J. Hum Comput Stud. 58(6), 697–718 (2003) 
+15. Jakesch, M., Bhat, A., Buschek, D., Zalmanson, L., Naaman, M.: Co-writing with opinionated 
+language models affects users’ views. In: Proceedings of the 2023 CHI Conference on Human 
+Factors in Computing Systems, pp. 1–15 (2023) 
+16. Khadpe, P ., Le, L., Nowak, K., Iqbal, S.T., Suh, J.: DISCERN: designing decision support 
+interfaces to investigate the complexities of workplace social decision-making with line man-
+agers. In: Proceedings of the CHI Conference on Human Factors in Computing Systems, 
+pp. 1–18 (2024) 
+17. Kim, D.H., Shin, H., Y adgarova, S., Son, J., Subramonyam, H., Kim, J.: AINeedsPlanner: a 
+workbook to support effective collaboration between ai experts and clients. In: Proceedings 
+of the 2024 ACM Designing Interactive Systems Conference, pp. 728–742 (2024) 
+18. Kobiella, C., Flores López, Y . S., Waltenberger, F., Draxler, F., Schmidt, A.: If the machine is 
+as good as me, then what use am i?"–how the use of ChatGPT changes young professionals’ 
+perception of productivity and accomplishment. In: Proceedings of the CHI Conference on 
+Human Factors in Computing Systems, pp. 1–16 (2024) 
+19. Jiang, J.A., Wade, K., Fiesler, C., Brubaker, J.R.: Supporting serendipity: opportunities and 
+challenges for Human-AI Collaboration in qualitative analysis. Proc. ACM Hum.-Comput. 
+Interact. 5(CSCW1), 1–23 (2021) 
+20. Thominet, L., Amorim, J., Acosta, K., Sohan, V .K.: Role play: conversational roles as a 
+framework for reﬂexive practice in AI-assisted qualitative research. J. Techn. Writ. Commun. 
+00472816241260044 (2024) 
+21. Li, H., Li, G.: Research on the construction of human-machine collaborative work model in 
+the age of artiﬁcial intelligence. Mod. Manage. 10(3), 360–367 (2020)
+===== PAGE 16 =====
+AI Agent Assist User Research: Collaborative Role Analysis to Inspire 249
+22. Christou, P .A.: How to use artiﬁcial intelligence (AI) as a resource, methodological and 
+analysis tool in qualitative research? Qual. Report 28(7) (2023) 
+23. Y an, L., Echeverria, V ., Fernandez-Nieto, G.M., Jin, Y ., Swiecki, Z., Zhao, L., et al.: Human-AI 
+collaboration in thematic analysis using ChatGPT: a user study and design recommendations. 
+In: Extended Abstracts of the CHI Conference on Human Factors in Computing Systems, 
+pp. 1–7 (2024) 
+24. Fan, M., Y ang, X., Y u, T., Liao, Q.V ., Zhao, J.: Human-AI collaboration for UX evaluation: 
+effects of explanation and synchronization. Proc. ACM Hum.-Comput. Interact. 6(CSCW1), 
+1–32 (2022) 
+25. Dellermann, D., Calma, A., Lipusch, N., Weber, T., Weigel, S., Ebel, P .: The future of human-
+AI collaboration: a taxonomy of design knowledge for hybrid intelligence systems. arXiv 
+preprint arXiv:2105.03354 (2021) 
+26. Siiman, L.A., Rannastu-Avalos, M., Pöysä-Tarhonen, J., Häkkinen, P ., Pedaste, M.: Opportu-
+nities and challenges for AI-assisted qualitative data analysis: an example from collaborative 
+problem-solving discourse data. In: International Conference on Innovative Technologies and 
+Learning, pp. 87–96. Springer Nature Switzerland, Cham (2023) 
+27. Rowe, J., Partridge, D.: Creativity: a survey of AI approaches. Artif. Intell. Rev. 7, 43–70 
+(1993) 
+28. Boden, M.A.: Creativity and artiﬁcial intelligence. Artif. Intell. 103(1–2), 347–356 (1998) 
+29. Luger, G., Stubbleﬁeld, W.: Artiﬁcial intelligence: structures and strategies for solving 
+complex problems. Benjamin/Cummins (2004) 
+30. Chen, G., Xie, P ., Dong, J., Wang, T.: Understanding programmatic creative: the role of AI. 
+J. Advert. 48(4), 347–355 (2019) 
+31. Elgammal, A.: CAN: Creative adversarial networks, generating “art” by learning about styles 
+and deviating from style norms. arXiv preprint arXiv:1706.07068, vol. 6 (2017) 
+32. Guilford, J.P .: The structure of intellect. Psychol. Bull. 53(4), 267 (1956) 
+33. Dumas, J.F., Redish, J.C.: A practical guide to usability testing. Greenwood Publishing Group 
+Inc. (1993) 
+34. Snyder, C.: Paper prototyping: the fast and easy way to design and reﬁne user interfaces. 
+Morgan Kaufmann(2003) 
+35. Kuniavsky, M.: Observing the user experience: a practitioner’s guide to user research. Elsevier 
+(2003) 
+36. Bughin, J., Hazan, E., Sree Ramaswamy, P ., DC, W., Chu, M.: Artiﬁcial intelligence: the next 
+digital frontier (2017) 
+37. Gasson, S.: Human-centered vs. user-centered approaches to information system design. J. 
+Inform. Technol. Theory Appl. 5(2), 5 (2003) 
+38. Dym, C.L., Agogino, A.M., Eris, O., Frey, D.D., Leifer, L.J.: Engineering design thinking, 
+teaching, and learning. J. Eng. Educ. 94(1), 103–120 (2005) 
+39. Martin, M.J.: Managing innovation and entrepreneurship in technology-based ﬁrms, vol. 20. 
+Wiley (1994) 
+40. Brown, T.: Design thinking. Harv. Bus. Rev. 86(6), 84 (2008) 
+41. Wright, P ., McCarthy, J.: Experience-centered design: designers, users, and communities in 
+dialogue, vol. 9. Morgan & Claypool Publishers (2010) 
+42. Huang, M.H., Rust, R.T.: Artiﬁcial intelligence in service. J. Serv. Res. 21(2), 155–172 (2018) 
+43. Kimbell, L.: Rethinking design thinking: Part I. Des. Cult. 3(3), 285–306 (2011) 
+44. von Thienen, J.P ., Weinstein, T.J., Meinel, C.: Creative metacognition in design thinking: 
+exploring theories, educational practices, and their implications for measurement. Front. 
+Psychol. 14, 1157001 (2023) 
+45. Parasuraman, R., Riley, V .: Humans and automation: use, misuse, disuse, abuse. Hum. Factors 
+39(2), 230–253 (1997)
+===== PAGE 17 =====
+250 Y . Xie et al.
+46. Sawyer, K.: Group genius: the creative power of collaboration. Basic Books (2017) 
+47. Zheng, N.N., Liu, Z.Y ., Ren, P .J., Ma, Y .Q., Chen, S.T., Y u, S.Y ., et al.: Hybrid-augmented 
+intelligence: collaboration and cognition. Front. Inform. Technol. Electron. Eng. 18(2), 153– 
+179 (2017) 
+48. McCormack, J., Hutchings, P ., Gifford, T., Y ee-King, M., Llano, M.T., D’inverno, M.: Design 
+considerations for real-time collaboration with creative artiﬁcial intelligence. Organ. Sound 
+25(1), 41–52 (2020) 
+49. McCormack, J., Gifford, T., Hutchings, P .: Autonomy, authenticity, authorship and intention 
+in computer generated art. In: Ekárt, A., Liapis, A., Castro Pena, M.L. (eds.) Computa-
+tional Intelligence in Music, Sound, Art and Design. EvoMUSART 2019. LNCS, vol. 11453. 
+Springer, Cham (2019). https://doi.org/10.1007/978-3-030-16667-0_3 
+50. Patton, M.Q.: Qualitative research & evaluation methods: integrating theory and practice. 
+Sage Publications (2014) 
+51. Goodman, E., Kuniavsky, M., Moed, A.: Observing the user experience: a practitioner’s guide 
+to user research. IEEE Trans. Prof. Commun. 56(3), 260–261 (2013) 
+52. Brynjolfsson, E., McAfee, A.: The second machine age: Work, progress, and prosperity in a 
+time of brilliant technologies. WW Norton & Company (2014) 
+53. Shmueli, G.: To explain or to predict? (2010) 
+54. Board of Innovation. Brainstorm buddy. Board of Innovation (n.d.). Retrieved 31 Jan 2025. 
+https://ai.boardoﬁnnovation.com/brainstorm-buddy 
+55. Tencent. Tencent meeting. Tencent (n.d.). Retrieved 31 Jan 2025. https://meeting.tencent. 
+com/ 
+56. Feishu. Minutes. Feishu (n.d.). Retrieved 31 Jan 2025. https://www.feishu.cn/product/min 
+utes 
+57. Uusitalo, S., Salovaara, A., Jokela, T., Salmimaa, M.: Clay to play with”: generative AI tools 
+in UX and industrial design practice. In: Proceedings of the 2024 ACM Designing Interactive 
+Systems Conference, pp. 1566–1578 (2024) 
+58. Kusal, S., Patil, S., Choudrie, J., Kotecha, K., Mishra, S., Abraham, A.: AI-based conver-
+sational agents: a scoping review from technologies to future directions. IEEE Access 10, 
+92337–92356 (2022) 
+59. Patton, M.Q.: Utilization-focused evaluation. Sage (1997) 
+60. Bick, M., Kummer, T.F.: Ambient intelligence and ubiquitous computing. In: Handbook 
+on Information Technologies for Education and Training, pp. 79–100. Springer Berlin 
+Heidelberg, Berlin, Heidelberg (2008)

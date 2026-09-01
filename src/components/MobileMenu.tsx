@@ -1,13 +1,15 @@
+import { Link } from "react-router-dom";
+
 type Props = {
   open: boolean;
   onClose: () => void;
 };
 
 const items = [
-  { label: "人机交互", href: "#cat-hci" },
-  { label: "媒体设计", href: "#cat-media" },
-  { label: "装置艺术", href: "#cat-install" },
-  { label: "About ME", href: "#about" },
+  { label: "人机交互", hash: "cat-hci" },
+  { label: "媒体设计", hash: "cat-media" },
+  { label: "装置艺术", hash: "cat-install" },
+  { label: "About ME", hash: "about" },
 ];
 
 export function MobileMenu({ open, onClose }: Props) {
@@ -22,9 +24,9 @@ export function MobileMenu({ open, onClose }: Props) {
       aria-hidden={!open}
     >
       {items.map((item, i) => (
-        <a
+        <Link
           key={item.label}
-          href={item.href}
+          to={{ pathname: "/", hash: `#${item.hash}` }}
           className={`text-[32px] font-medium text-[var(--white)] no-underline transition-all duration-500 ${
             open ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
           }`}
@@ -32,7 +34,7 @@ export function MobileMenu({ open, onClose }: Props) {
           onClick={onClose}
         >
           {item.label}
-        </a>
+        </Link>
       ))}
     </div>
   );

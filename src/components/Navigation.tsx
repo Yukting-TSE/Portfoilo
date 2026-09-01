@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 type Props = {
   menuOpen: boolean;
   onToggleMenu: () => void;
@@ -6,10 +8,10 @@ type Props = {
 };
 
 const links = [
-  { label: "人机交互", href: "#cat-hci" },
-  { label: "媒体设计", href: "#cat-media" },
-  { label: "装置艺术", href: "#cat-install" },
-  { label: "About ME", href: "#about" },
+  { label: "人机交互", hash: "cat-hci" },
+  { label: "媒体设计", hash: "cat-media" },
+  { label: "装置艺术", hash: "cat-install" },
+  { label: "About ME", hash: "about" },
 ];
 
 export function Navigation({
@@ -29,8 +31,8 @@ export function Navigation({
       }}
       aria-hidden={faded}
     >
-      <a
-        href="#top"
+      <Link
+        to="/"
         className="relative z-[110] font-[family-name:var(--font-display)] text-[21px] tracking-tight transition-opacity duration-300 hover:opacity-45 sm:text-[26px]"
         tabIndex={faded ? -1 : undefined}
       >
@@ -38,16 +40,16 @@ export function Navigation({
         <span className="select-none tracking-[-0.02em]" aria-hidden>
           ✳︎
         </span>
-      </a>
+      </Link>
 
       <nav
         className="hidden items-center gap-7 md:flex lg:gap-9"
         aria-label="Primary"
       >
         {links.map((l) => (
-          <a
-            key={l.href}
-            href={l.href}
+          <Link
+            key={l.hash}
+            to={{ pathname: "/", hash: `#${l.hash}` }}
             tabIndex={faded ? -1 : undefined}
             className="group relative text-[13px] tracking-[0.04em] transition-all duration-300 hover:-translate-y-0.5 lg:text-[14px]"
           >
@@ -58,7 +60,7 @@ export function Navigation({
               className="pointer-events-none absolute -bottom-1 left-0 h-px w-0 bg-[var(--fg)] transition-all duration-300 group-hover:w-full"
               aria-hidden
             />
-          </a>
+          </Link>
         ))}
       </nav>
 
