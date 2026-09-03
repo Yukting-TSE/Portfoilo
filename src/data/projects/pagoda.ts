@@ -217,6 +217,7 @@ export const pagodaDetail: ProjectDetail = {
         {
           type: "goals",
           compact: true,
+          offsetTitle: true,
           items: [
             {
               title: "痛点",

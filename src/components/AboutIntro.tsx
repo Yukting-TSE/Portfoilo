@@ -236,7 +236,7 @@ export function AboutIntro() {
     <div
       id="about"
       ref={trackRef}
-      className="relative z-[1] scroll-mt-16 bg-black lg:scroll-mt-20"
+      className="relative z-[1] scroll-mt-16 bg-black [overflow-anchor:none] lg:scroll-mt-20"
       style={{ height: `${trackVh}vh` }}
     >
       <section

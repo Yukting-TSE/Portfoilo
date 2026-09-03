@@ -29,3 +29,7 @@ Thumbs.db
 _*hero*
 fitpal-test.jpg
 test-new.svg
+*.lnk
+scripts/_extract_media3/
+scripts/_fetch_oppo_refs*.py
+public/images/projects/emotion-resonance/Emotional resonance.mp4

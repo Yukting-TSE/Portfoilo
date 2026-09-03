@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import type { MouseEvent } from "react";
 
 type Props = {
   menuOpen: boolean;
@@ -9,8 +10,8 @@ type Props = {
 
 const links = [
   { label: "人机交互", hash: "cat-hci" },
-  { label: "媒体设计", hash: "cat-media" },
-  { label: "装置艺术", hash: "cat-install" },
+  { label: "媒体艺术", hash: "cat-media" },
+  { label: "商业合作", hash: "cat-commercial" },
   { label: "About ME", hash: "about" },
 ];
 
@@ -20,6 +21,17 @@ export function Navigation({
   opacity = 1,
 }: Props) {
   const faded = opacity < 0.04;
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const goHomeTop = (e: MouseEvent) => {
+    if (location.pathname !== "/") return;
+    e.preventDefault();
+    if (location.hash) {
+      navigate("/", { replace: true });
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
 
   return (
     <header
@@ -33,6 +45,7 @@ export function Navigation({
     >
       <Link
         to="/"
+        onClick={goHomeTop}
         className="relative z-[110] font-[family-name:var(--font-display)] text-[21px] tracking-tight transition-opacity duration-300 hover:opacity-45 sm:text-[26px]"
         tabIndex={faded ? -1 : undefined}
       >

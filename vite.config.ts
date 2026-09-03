@@ -15,15 +15,7 @@ export default defineConfig({
     strictPort: false,
     open: true,
     watch: {
-      ignored: [
-        "**/*.jpg",
-        "**/*.jpeg",
-        "**/*.png",
-        "**/*.gif",
-        "**/*.webp",
-        "**/*.mp4",
-        "**/*.mov",
-      ],
+      ignored: [],
     },
   },
   preview: {

@@ -92,6 +92,21 @@ textarea {
   }
 }
 
+@keyframes mediaSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.media-spinner {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  border-top-color: rgba(255, 255, 255, 0.85);
+  animation: mediaSpin 0.75s linear infinite;
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);

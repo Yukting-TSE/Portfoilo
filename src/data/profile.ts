@@ -32,8 +32,8 @@ export const profile = {
   },
   pills: [
     { label: "人机交互", href: "#cat-hci" },
-    { label: "媒体设计", href: "#cat-media" },
-    { label: "装置艺术", href: "#cat-install" },
+    { label: "媒体艺术", href: "#cat-media" },
+    { label: "商业合作", href: "#cat-commercial" },
     { label: "个人简历", href: publicUrl("CV-2025-10.pdf") },
   ],
 };

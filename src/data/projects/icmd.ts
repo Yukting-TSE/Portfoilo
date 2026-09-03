@@ -16,6 +16,7 @@ export const icmdDetail: ProjectDetail = {
       label: "Keyword",
       value: "游戏交互创新 · 物导向设计 · 游戏交互原型 · 传感器与空间计算",
     },
+    { label: "Time", value: "2024" },
     { label: "Tutor", value: "郁新安" },
   ],
   lead: [

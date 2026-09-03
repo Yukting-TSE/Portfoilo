@@ -11,14 +11,26 @@ export type DetailFigure = {
   body?: string;
   /** Relative display scale, e.g. 0.3 */
   scale?: number;
+  /** Place consecutive row figures side-by-side, flush to column edges */
+  row?: boolean;
   /** CSS invert filter for dark backgrounds */
   invert?: boolean;
+  /** Render image in grayscale */
+  grayscale?: boolean;
   /** Render as muted video; plays when scrolled into view */
   video?: boolean;
   /** Animated GIF; loads/plays only when scrolled into view */
   gif?: boolean;
-  /** Cover/hero fit: natural keeps original aspect (no crop) */
+  /** Show mute / unmute control on in-view videos */
+  soundToggle?: boolean;
+  /** Cover/hero fit: natural keeps original aspect (no crop); cover fills a fixed frame */
   fit?: "cover" | "natural";
+  /** CSS aspect-ratio for a shared frame, e.g. "3 / 2" */
+  aspect?: string;
+  /** Optional poster image when `video` is true (cover hero) */
+  poster?: string;
+  /** Bilibili BV id — poster stays as src until scrolled into view */
+  bilibili?: string;
 };
 
 export type DetailTable = {
@@ -67,8 +79,14 @@ export type DetailSection =
   | {
       type: "goals";
       highlight?: boolean;
+      /** Optional section title above the list (same style as prose titles) */
+      heading?: string;
+      /** Short lead line directly above the first goal (no large gap) */
+      lead?: string;
       /** Tighter divider spacing between items */
       compact?: boolean;
+      /** Push down to align with sibling prose body (skip matching title row) */
+      offsetTitle?: boolean;
       items: { title: string; body: string; figure?: DetailFigure }[];
     }
   | { type: "prototype"; prototype: DetailPrototype }
@@ -79,9 +97,27 @@ export type DetailSection =
       /** Optional large section title above / in the left column */
       heading?: string;
       /** Vertical alignment between columns; default start */
-      align?: "start" | "end";
+      align?: "start" | "end" | "between";
+      /** Per-row alignment when subgrid pairs left/right (e.g. figure bottoms) */
+      rowAlign?: "start" | "end";
+      /** Offset right column to align with prose body (skip matching title row) */
+      offsetTitle?: boolean;
       left: DetailSection[];
       right: DetailSection[];
+    };
+
+export type DetailLeadParagraph =
+  | string
+  | {
+      before?: string;
+      link: { label: string; href: string };
+      after?: string;
+    }
+  | {
+      /** Quote / attribution block */
+      text: string;
+      /** Smaller, normal-weight; sits at bottom of lead column */
+      muted?: true;
     };
 
 export type ProjectDetail = {
@@ -96,7 +132,7 @@ export type ProjectDetail = {
   meta?: DetailMetaItem[];
   /** Right meta row aligned with the first left meta row */
   services?: DetailMetaItem;
-  lead: string[];
+  lead: DetailLeadParagraph[];
   sections: DetailSection[];
   closing?: string;
 };

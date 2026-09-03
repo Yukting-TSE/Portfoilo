@@ -7,8 +7,8 @@ type Props = {
 
 const items = [
   { label: "人机交互", hash: "cat-hci" },
-  { label: "媒体设计", hash: "cat-media" },
-  { label: "装置艺术", hash: "cat-install" },
+  { label: "媒体艺术", hash: "cat-media" },
+  { label: "商业合作", hash: "cat-commercial" },
   { label: "About ME", hash: "about" },
 ];
 

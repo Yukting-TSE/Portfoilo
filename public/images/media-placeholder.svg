@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none">
+  <rect width="1600" height="900" fill="#111111"/>
+  <rect x="0.5" y="0.5" width="1599" height="899" stroke="rgba(255,255,255,0.08)"/>
+  <g opacity="0.45" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" fill="none">
+    <rect x="730" y="372" width="140" height="100" rx="10"/>
+    <circle cx="768" cy="404" r="12"/>
+    <path d="M742 454l28-28 22 22 18-18 38 38H742z"/>
+  </g>
+  <text x="800" y="520" text-anchor="middle" fill="rgba(255,255,255,0.35)" font-family="Helvetica Neue, Arial, sans-serif" font-size="22" letter-spacing="0.08em">MEDIA</text>
+</svg>

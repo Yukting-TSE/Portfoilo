@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { AboutIntro } from "../components/AboutIntro";
 import { ContactOverlay } from "../components/ContactOverlay";
 import { Footer } from "../components/Footer";
@@ -8,6 +9,7 @@ import { Navigation } from "../components/Navigation";
 import { SelectedWork } from "../components/SelectedWork";
 
 export function HomePage() {
+  const { hash } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [navOpacity, setNavOpacity] = useState(1);
@@ -15,6 +17,18 @@ export function HomePage() {
   useEffect(() => {
     document.body.style.overflow = menuOpen || contactOpen ? "hidden" : "";
   }, [menuOpen, contactOpen]);
+
+  // Keep first paint on the hero unless the URL explicitly targets a section.
+  useEffect(() => {
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  useEffect(() => {
+    if (hash) return;
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [hash]);
 
   useEffect(() => {
     const update = () => {

@@ -46,22 +46,6 @@ export const fitpalDetail: ProjectDetail = {
             "社区活动能提升运动热情、提供正向反馈并缓解孤独，AI Chatbot 也在陪伴、监督与健康知识传递上展现优势；但如何把社区资源与 AI 结合，系统重塑不科学的运动认知，仍缺少清晰的设计范式。",
           ],
         },
-        {
-          type: "prose",
-          title: "研究问题（RQ）",
-          paragraphs: [
-            "RQ1：老年人对日常运动存在哪些误区？",
-            "RQ2：以社区为基础、并整合 AI Chatbot 的设计范式，能为重塑这些误区提供哪些机会？",
-          ],
-        },
-        {
-          type: "prose",
-          title: "方法",
-          paragraphs: [
-            "研究结合文献综述、参与式观察与深度访谈。我们在上海社区的居住区、公园、照料中心与养老院观察老年人日常锻炼类型、方式、设施使用，以及群体活动中的社交互动，并以照片与影像记录。",
-            "随后在锻炼场所发起闲聊，筛选 60–90 岁、规律锻炼的长者；共 6 人接受约 20 分钟半结构化访谈（男女性各 3 人），主题覆盖日常锻炼习惯、健康状况、动机、对社区锻炼的看法，以及对智能健康设备的接受度。",
-          ],
-        },
       ],
       right: [
         {
@@ -73,6 +57,30 @@ export const fitpalDetail: ProjectDetail = {
             },
           ],
         },
+      ],
+    },
+    {
+      type: "columns",
+      align: "start",
+      left: [
+        {
+          type: "prose",
+          title: "研究问题（RQ）",
+          paragraphs: [
+            "RQ1：老年人对日常运动存在哪些误区？",
+            "RQ2：以社区为基础、并整合 AI Chatbot 的设计范式，能为重塑这些误区提供哪些机会？",
+          ],
+        },
+        {
+          type: "prose",
+          title: "研究方法",
+          paragraphs: [
+            "研究结合文献综述、参与式观察与深度访谈。我们在上海社区的居住区、公园、照料中心与养老院观察老年人日常锻炼类型、方式、设施使用，以及群体活动中的社交互动，并以照片与影像记录。",
+            "随后在锻炼场所发起闲聊，筛选 60–90 岁、规律锻炼的长者；共 6 人接受约 20 分钟半结构化访谈（男女性各 3 人），主题覆盖日常锻炼习惯、健康状况、动机、对社区锻炼的看法，以及对智能健康设备的接受度。",
+          ],
+        },
+      ],
+      right: [
         {
           type: "table",
           table: {
@@ -113,6 +121,7 @@ export const fitpalDetail: ProjectDetail = {
         {
           type: "goals",
           compact: true,
+          offsetTitle: true,
           items: [
             {
               title: "误区 01 · 单一偏好",
@@ -165,15 +174,10 @@ export const fitpalDetail: ProjectDetail = {
       align: "start",
       left: [
         {
-          type: "prose",
-          title: "设计目标",
-          paragraphs: [
-            "围绕「让科学运动可被接受、可被执行、可被坚持」，我们设定三项目标：",
-          ],
-        },
-        {
           type: "goals",
           compact: true,
+          heading: "设计目标",
+          lead: "围绕「让科学运动可被接受、可被执行、可被坚持」，我们设定三项目标：",
           items: [
             {
               title: "G1 可接受的科学知识",
@@ -203,17 +207,6 @@ export const fitpalDetail: ProjectDetail = {
       ],
     },
     {
-      type: "figure",
-      fullWidth: true,
-      figures: [
-        {
-          src: img("fig-system.jpg"),
-          caption:
-            "Fig.1  Interaction diagram — User / Server / Community",
-        },
-      ],
-    },
-    {
       type: "columns",
       align: "start",
       left: [
@@ -226,6 +219,24 @@ export const fitpalDetail: ProjectDetail = {
             "Server Side：汇聚健康数据、专业处方与个体基线，接收手环日数据并更新库，向 FitPal 提供对话材料，同时把锻炼数据回传社区用于健康管理。",
           ],
         },
+      ],
+      right: [
+        {
+          type: "figure",
+          figures: [
+            {
+              src: img("fig-system.jpg"),
+              caption:
+                "Fig.1  Interaction diagram — User / Server / Community",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: "columns",
+      align: "start",
+      left: [
         {
           type: "prose",
           paragraphs: [

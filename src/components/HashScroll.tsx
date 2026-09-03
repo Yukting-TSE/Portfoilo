@@ -32,5 +32,11 @@ export function HashScroll() {
     };
   }, [pathname, hash]);
 
+  // Fresh `/` with no section hash should not inherit a restored scroll offset.
+  useEffect(() => {
+    if (pathname !== "/" || hash) return;
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [pathname, hash]);
+
   return null;
 }

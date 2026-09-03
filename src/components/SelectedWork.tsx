@@ -6,8 +6,8 @@ import { useInView } from "../hooks/useInView";
 import { motion } from "../motion/motionConfig";
 
 function methodTags(method: string) {
-  return method
-    .split(/[·•|,/]/)
+  return (method ?? "")
+    .split(/[·•|,/；;]/)
     .map((s) => s.trim())
     .filter(Boolean);
 }

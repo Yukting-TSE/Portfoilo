@@ -4,11 +4,13 @@ import {
   useState,
   type CSSProperties,
   type MutableRefObject,
+  type ReactNode,
   type RefObject,
 } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ContactOverlay } from "../components/ContactOverlay";
 import { Footer } from "../components/Footer";
+import { LoadingMark, SmartImage, useMediaDimensions, useVideoDimensions } from "../components/MediaLoad";
 import { MobileMenu } from "../components/MobileMenu";
 import { Navigation } from "../components/Navigation";
 import { caseDetailFor, findProject } from "../data/projects";
@@ -107,7 +109,7 @@ function CaseStudy({
   return (
     <article className="pb-28">
       <div className="px-5 pt-10 sm:px-8 sm:pt-14 lg:px-12 lg:pt-16">
-        <div className="grid gap-x-12 gap-y-0 lg:grid-cols-2 xl:gap-x-20">
+        <div className="grid gap-x-12 gap-y-0 lg:grid-cols-2 lg:items-stretch xl:gap-x-20">
           <div>
             <p className="mb-4 text-[0.85rem] font-bold tracking-[0.02em] text-white sm:mb-5 sm:text-[0.9rem]">
               {detail.eyebrow ?? "Case Study"}
@@ -134,41 +136,65 @@ function CaseStudy({
           )}
 
           <div
-            className={`w-full max-w-xl space-y-5 text-[0.95rem] font-bold leading-[1.7] tracking-[0.035em] text-white sm:text-[1.05rem] ${
+            className={`flex w-full max-w-xl flex-col text-white ${
               meta.length > 0 ? "mt-10 sm:mt-12" : "mt-8"
             }`}
           >
-            {detail.lead.map((p) => (
-              <p key={p.slice(0, 24)}>{p}</p>
-            ))}
+            <div className="space-y-5 text-[0.95rem] font-bold leading-[1.7] tracking-[0.035em] sm:text-[1.05rem]">
+              {detail.lead.map((p, i) => {
+                if (typeof p === "string") {
+                  return <p key={p.slice(0, 24)}>{p}</p>;
+                }
+                if ("muted" in p && p.muted) return null;
+                if ("link" in p) {
+                  return (
+                    <p key={`lead-link-${i}`}>
+                      {p.before}
+                      <a
+                        href={p.link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline underline-offset-4 transition-opacity hover:opacity-60"
+                      >
+                        {p.link.label}
+                      </a>
+                      {p.after}
+                    </p>
+                  );
+                }
+                return null;
+              })}
+            </div>
+            {detail.lead.some(
+              (p) => typeof p !== "string" && "muted" in p && p.muted,
+            ) && (
+              <div className="mt-auto space-y-2 pt-8 text-[0.72rem] font-normal leading-[1.65] tracking-[0.02em] text-white/70 sm:text-[0.78rem]">
+                {detail.lead.map((p, i) => {
+                  if (typeof p === "string" || !("muted" in p) || !p.muted) {
+                    return null;
+                  }
+                  return <p key={`lead-muted-${i}`}>{p.text}</p>;
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {detail.cover && (
-        <div className="mt-14 w-full px-5 sm:mt-16 sm:px-8 lg:mt-20 lg:px-12">
-          <div className="overflow-hidden rounded-2xl">
-            <img
-              src={detail.cover.src}
-              alt={detail.cover.alt ?? ""}
-              className={
-                detail.cover.fit === "natural"
-                  ? "h-auto w-full"
-                  : "aspect-video h-auto w-full object-cover"
-              }
-            />
-          </div>
+        <div className="mt-12 w-full px-5 sm:mt-14 sm:px-8 lg:mt-16 lg:px-12">
+          <CoverMedia cover={detail.cover} />
         </div>
       )}
 
-      <div className="mt-16 space-y-14 px-5 sm:px-8 lg:mt-20 lg:space-y-16 lg:px-12">
+      <div className="mt-14 space-y-14 px-5 sm:mt-16 sm:px-8 lg:mt-20 lg:space-y-20 lg:px-12">
         {bodySections.map((section, i) => (
           <BodySection key={`${section.type}-${i}`} section={section} />
         ))}
       </div>
 
       {detail.closing && (
-        <p className="mx-auto mt-28 max-w-3xl px-5 text-center font-[family-name:var(--font-display)] text-[clamp(1.15rem,2.5vw,1.55rem)] font-bold tracking-[-0.02em] text-white sm:px-8">
+        <p className="mx-auto mt-20 max-w-3xl px-5 text-center font-[family-name:var(--font-display)] text-[clamp(1.15rem,2.5vw,1.55rem)] font-bold tracking-[-0.02em] text-white sm:px-8">
           {detail.closing}
         </p>
       )}
@@ -176,19 +202,251 @@ function CaseStudy({
   );
 }
 
+function CoverMedia({ cover }: { cover: DetailFigure }) {
+  // Local mp4 cover — never fall through to Bilibili.
+  if (cover.video) {
+    return <LocalCoverVideo cover={cover} />;
+  }
+
+  if (!cover.bilibili) {
+    return (
+      <div className="overflow-hidden rounded-2xl">
+        <img
+          src={cover.src}
+          alt={cover.alt ?? ""}
+          className={
+            cover.fit === "natural"
+              ? "h-auto w-full"
+              : "aspect-video h-auto w-full object-cover"
+          }
+        />
+      </div>
+    );
+  }
+
+  return <BilibiliCover cover={cover} />;
+}
+
+/** Local cover.mp4: poster until in view, then play with optional sound toggle. */
+function LocalCoverVideo({ cover }: { cover: DetailFigure }) {
+  const { ref, inView } = useInView<HTMLDivElement>({
+    once: false,
+    threshold: 0.35,
+    rootMargin: "0px",
+  });
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [ready, setReady] = useState(false);
+  const [muted, setMuted] = useState(true);
+
+  const showVideo = inView && ready;
+
+  useEffect(() => {
+    setReady(false);
+    setMuted(true);
+  }, [cover.src]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = muted;
+    video.defaultMuted = muted;
+    video.playsInline = true;
+    if (showVideo) {
+      void video.play().catch(() => {});
+    } else {
+      video.pause();
+      if (!inView) {
+        try {
+          video.currentTime = 0;
+        } catch {
+          /* ignore */
+        }
+      }
+    }
+  }, [showVideo, inView, muted, cover.src]);
+
+  const fitClass =
+    cover.fit === "natural"
+      ? "h-auto w-full object-contain"
+      : "h-full w-full object-cover";
+
+  return (
+    <div
+      ref={ref}
+      className={
+        cover.fit === "natural"
+          ? "relative w-full overflow-hidden rounded-2xl bg-black"
+          : "relative aspect-video w-full overflow-hidden rounded-2xl bg-black"
+      }
+    >
+      <video
+        ref={videoRef}
+        src={cover.src}
+        poster={cover.poster}
+        className={`absolute inset-0 z-0 transition-opacity duration-500 ${fitClass} ${
+          showVideo ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        muted={muted}
+        loop
+        playsInline
+        preload="auto"
+        controls={false}
+        disablePictureInPicture
+        onLoadedData={() => setReady(true)}
+        onCanPlay={() => setReady(true)}
+        onError={() => setReady(false)}
+      />
+
+      <img
+        src={cover.poster ?? cover.src}
+        alt={cover.alt ?? ""}
+        className={`absolute inset-0 z-[1] h-full w-full object-cover transition-opacity duration-500 ${
+          showVideo ? "pointer-events-none opacity-0" : "opacity-100"
+        }`}
+      />
+
+      {inView && !ready && (
+        <LoadingMark
+          className="pointer-events-none absolute inset-0 z-[2]"
+          label="Loading video"
+          posterSrc={cover.poster}
+          objectFit="cover"
+        />
+      )}
+
+      {cover.soundToggle && showVideo && (
+        <button
+          type="button"
+          onClick={() => setMuted((v) => !v)}
+          className="absolute bottom-3 right-3 z-[3] rounded-full border border-white/25 bg-black/55 px-3 py-1.5 text-[0.7rem] font-bold tracking-[0.04em] text-white backdrop-blur-sm transition-opacity hover:bg-black/75"
+          aria-label={muted ? "Unmute video" : "Mute video"}
+        >
+          {muted ? "开启声音" : "静音"}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function BilibiliCover({ cover }: { cover: DetailFigure }) {
+  const { ref, inView } = useInView<HTMLDivElement>({
+    once: false,
+    threshold: 0.35,
+    rootMargin: "0px",
+  });
+  const [iframeReady, setIframeReady] = useState(false);
+
+  useEffect(() => {
+    if (!cover.bilibili) return;
+    setIframeReady(false);
+    const t = window.setTimeout(() => setIframeReady(true), 2800);
+    return () => window.clearTimeout(t);
+  }, [cover.bilibili]);
+
+  const playerSrc = `https://player.bilibili.com/player.html?isOutside=true&bvid=${encodeURIComponent(
+    cover.bilibili ?? "",
+  )}&page=1&autoplay=1&muted=1&danmaku=0&high_quality=1&loop=1`;
+
+  const showVideo = inView && iframeReady;
+  const showLoading = inView && !iframeReady;
+
+  return (
+    <div
+      ref={ref}
+      className="relative aspect-video w-full overflow-hidden rounded-2xl bg-black"
+    >
+      <iframe
+        key={cover.bilibili}
+        src={playerSrc}
+        title={cover.alt ?? "Bilibili video"}
+        className={`absolute inset-0 z-0 h-full w-full border-0 transition-opacity duration-500 ${
+          showVideo ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowFullScreen
+        scrolling="no"
+        onLoad={() => setIframeReady(true)}
+      />
+
+      <img
+        src={cover.poster ?? cover.src}
+        alt={cover.alt ?? ""}
+        className={`absolute inset-0 z-[1] h-full w-full object-cover transition-opacity duration-500 ${
+          showVideo ? "pointer-events-none opacity-0" : "opacity-100"
+        }`}
+      />
+
+      {showLoading && (
+        <LoadingMark
+          className="pointer-events-none absolute inset-0 z-[2]"
+          label="Loading video"
+          posterSrc={cover.poster ?? cover.src}
+          objectFit="cover"
+        />
+      )}
+    </div>
+  );
+}
+
 function BodySection({ section }: { section: DetailSection }) {
   if (section.type === "columns") {
     const isEnd = section.align === "end";
+    const isBetween = section.align === "between";
+    const pairCount = Math.max(section.left.length, section.right.length);
+    const useSubgrid =
+      !isEnd &&
+      !isBetween &&
+      !section.heading &&
+      !section.offsetTitle &&
+      section.left.length === section.right.length &&
+      pairCount > 1;
+    const titleOffset = section.offsetTitle ? (
+      <div
+        className="mb-4 font-[family-name:var(--font-display)] text-[clamp(0.95rem,1.5vw,1.15rem)] font-bold tracking-[-0.02em] text-transparent select-none"
+        aria-hidden
+      >
+        &nbsp;
+      </div>
+    ) : null;
+
+    if (useSubgrid) {
+      const rowAlignClass =
+        section.rowAlign === "end" ? "lg:items-end" : "";
+      return (
+        <div
+          className="grid gap-x-12 gap-y-5 lg:grid-cols-2 xl:gap-x-20"
+          style={{ gridTemplateRows: `repeat(${pairCount}, auto)` }}
+        >
+          <div
+            className={`grid w-full max-w-xl gap-y-5 lg:grid-rows-subgrid ${rowAlignClass}`}
+            style={{ gridRow: `span ${pairCount}` }}
+          >
+            {section.left.map((child, i) => (
+              <SectionBlock key={`L-${child.type}-${i}`} section={child} />
+            ))}
+          </div>
+          <div
+            className={`grid w-full max-w-xl gap-y-5 lg:grid-rows-subgrid ${rowAlignClass}`}
+            style={{ gridRow: `span ${pairCount}` }}
+          >
+            {section.right.map((child, i) => (
+              <SectionBlock key={`R-${child.type}-${i}`} section={child} />
+            ))}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div
-        className={`grid gap-x-12 gap-y-12 lg:grid-cols-2 xl:gap-x-20 ${
-          isEnd ? "lg:items-stretch" : "lg:items-start"
+        className={`grid gap-x-12 gap-y-10 lg:grid-cols-2 xl:gap-x-20 ${
+          isEnd || isBetween ? "lg:items-stretch" : "lg:items-start"
         }`}
       >
         <div
           className={
             isEnd
-              ? "flex w-full max-w-xl flex-col gap-12"
+              ? "flex w-full max-w-xl flex-col gap-10"
               : "w-full max-w-xl space-y-10"
           }
         >
@@ -203,10 +461,25 @@ function BodySection({ section }: { section: DetailSection }) {
             ))}
           </div>
         </div>
-        <div className="space-y-12">
-          {section.right.map((child, i) => (
-            <SectionBlock key={`R-${child.type}-${i}`} section={child} />
-          ))}
+        <div
+          className={
+            isBetween
+              ? "flex h-full flex-col"
+              : "space-y-10"
+          }
+        >
+          {titleOffset}
+          <div
+            className={
+              isBetween
+                ? "flex min-h-0 flex-1 flex-col justify-between gap-6 lg:gap-8"
+                : undefined
+            }
+          >
+            {section.right.map((child, i) => (
+              <SectionBlock key={`R-${child.type}-${i}`} section={child} />
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -214,12 +487,7 @@ function BodySection({ section }: { section: DetailSection }) {
 
   if (section.type === "prototype") {
     return (
-      <div className="relative grid items-start gap-x-12 gap-y-12 -mt-24 pt-24 lg:-mt-28 lg:grid-cols-2 lg:pt-28 xl:gap-x-20">
-        {/* Divider centered in the gap, full width across both columns */}
-        <div
-          className="pointer-events-none absolute top-12 right-0 left-0 h-px bg-white/25 lg:top-14"
-          aria-hidden
-        />
+      <div className="relative grid items-start gap-x-12 gap-y-10 border-t border-white/25 pt-8 lg:grid-cols-2 lg:pt-12 xl:gap-x-20">
         <div className="w-full max-w-xl">
           <PrototypeText prototype={section.prototype} />
         </div>
@@ -231,12 +499,11 @@ function BodySection({ section }: { section: DetailSection }) {
   }
 
   if (section.type === "figure") {
-    const stackGap =
-      section.figures.length > 1 ? "space-y-5" : "space-y-12";
+    const stackGap = "space-y-10";
     if (section.columns && section.columns > 1) {
       return (
         <div
-          className={`grid w-full gap-x-6 gap-y-10 sm:gap-x-8 ${
+          className={`grid w-full gap-x-8 gap-y-10 sm:gap-x-10 ${
             section.columns === 3
               ? "grid-cols-1 md:grid-cols-3"
               : "grid-cols-1 md:grid-cols-2"
@@ -297,7 +564,7 @@ function PartHeader({
   section: Extract<DetailSection, { type: "part" }>;
 }) {
   return (
-    <header className="w-full max-w-xl pt-6 lg:pt-8">
+    <header className="w-full max-w-xl pt-2 lg:pt-4">
       <h2 className="font-[family-name:var(--font-display)] text-[clamp(1.65rem,3.2vw,2.5rem)] font-bold leading-[1.05] tracking-[-0.045em] text-white">
         {section.title}
       </h2>
@@ -318,11 +585,11 @@ function SectionBlock({ section }: { section: DetailSection }) {
       return (
         <section>
           {section.title && (
-            <h3 className="mb-2 font-[family-name:var(--font-display)] text-[clamp(0.95rem,1.5vw,1.15rem)] font-bold tracking-[-0.02em] text-white">
+            <h3 className="mb-4 font-[family-name:var(--font-display)] text-[clamp(0.95rem,1.5vw,1.15rem)] font-bold tracking-[-0.02em] text-white">
               {section.title}
             </h3>
           )}
-          <div className="space-y-3.5">
+          <div className="space-y-5">
             {section.paragraphs.map((p, i) => (
               <p
                 key={`${i}-${p.slice(0, 24)}`}
@@ -338,24 +605,14 @@ function SectionBlock({ section }: { section: DetailSection }) {
       );
 
     case "figure":
-      return (
-        <div
-          className={
-            section.figures.length > 1 ? "space-y-5" : "space-y-12"
-          }
-        >
-          {section.figures.map((fig) => (
-            <FigureBlock key={fig.src} figure={fig} />
-          ))}
-        </div>
-      );
+      return <FigureStack figures={section.figures} />;
 
     case "table":
       return <TableBlock table={section.table} />;
 
     case "goals": {
       const compact = Boolean(section.compact);
-      return (
+      const goals = (
         <section
           className={
             section.highlight
@@ -365,6 +622,16 @@ function SectionBlock({ section }: { section: DetailSection }) {
                 : "space-y-10"
           }
         >
+          {section.heading && (
+            <h3 className="mb-4 font-[family-name:var(--font-display)] text-[clamp(0.95rem,1.5vw,1.15rem)] font-bold tracking-[-0.02em] text-white">
+              {section.heading}
+            </h3>
+          )}
+          {section.lead && (
+            <p className="text-[0.8rem] font-bold leading-[1.75] tracking-[0.035em] text-white sm:text-[0.88rem]">
+              {section.lead}
+            </p>
+          )}
           {section.items.map((item, i) => (
             <div
               key={`${item.title}-${i}`}
@@ -372,7 +639,11 @@ function SectionBlock({ section }: { section: DetailSection }) {
                 section.highlight
                   ? "border-t border-white/20 pt-5 first:border-t-0 first:pt-0"
                   : compact
-                    ? "border-t border-white/25 py-3.5 first:border-t-0 first:pt-0"
+                    ? `border-t border-white/25 py-3.5 ${
+                        section.lead && i === 0
+                          ? "mt-3 border-t-0 pt-0"
+                          : "first:border-t-0 first:pt-0"
+                      }`
                     : "border-t border-white/25 pt-6"
               }
             >
@@ -389,6 +660,20 @@ function SectionBlock({ section }: { section: DetailSection }) {
             </div>
           ))}
         </section>
+      );
+
+      if (!section.offsetTitle) return goals;
+
+      return (
+        <div>
+          <div
+            className="mb-4 font-[family-name:var(--font-display)] text-[clamp(0.95rem,1.5vw,1.15rem)] font-bold tracking-[-0.02em] text-transparent select-none"
+            aria-hidden
+          >
+            &nbsp;
+          </div>
+          {goals}
+        </div>
       );
     }
 
@@ -445,7 +730,7 @@ function FigureRow({ figures }: { figures: DetailFigure[] }) {
 
   if (!sideBySide || !thumb || !main) {
     return (
-      <div className="space-y-12">
+      <div className="space-y-10">
         {figures.map((fig) => (
           <FigureBlock key={fig.src} figure={fig} />
         ))}
@@ -460,31 +745,29 @@ function FigureRow({ figures }: { figures: DetailFigure[] }) {
     <div className="relative w-full overflow-visible">
       <div className="relative w-full">
         <div className="mb-3 w-fit lg:absolute lg:top-0 lg:right-full lg:mb-0 lg:mr-3 xl:mr-4">
-          <div className="overflow-hidden rounded-2xl">
-            <img
-              ref={thumbRef}
-              src={thumb.src}
-              alt={thumb.alt ?? thumb.caption ?? ""}
-              className="block h-40 w-auto max-w-none object-contain object-top lg:h-[var(--pair-h,auto)]"
-              style={{
-                ...(thumb.invert ? { filter: "invert(1)" } : null),
-                ...(pairHeight
-                  ? ({ "--pair-h": `${pairHeight}px` } as CSSProperties)
-                  : null),
-              }}
-              loading="lazy"
-            />
-          </div>
+          <SmartImage
+            imgRef={thumbRef}
+            src={thumb.src}
+            alt={thumb.alt ?? thumb.caption ?? ""}
+            wrapClassName="overflow-hidden rounded-2xl"
+            objectFit="contain"
+            className="block h-40 w-auto max-w-none object-contain object-top lg:h-[var(--pair-h,auto)]"
+            style={{
+              ...figureImageStyle(thumb),
+              ...(pairHeight
+                ? ({ "--pair-h": `${pairHeight}px` } as CSSProperties)
+                : null),
+            }}
+            loading="lazy"
+          />
         </div>
 
-        <div
-          ref={mainBoxRef}
-          className={`overflow-hidden rounded-2xl`}
-        >
+        <div ref={mainBoxRef} className="overflow-hidden rounded-2xl">
           {main.video ? (
             <InViewVideo
               src={main.src}
               className="block h-auto w-full object-contain"
+              soundToggle={Boolean(main.soundToggle)}
             />
           ) : main.gif ? (
             <InViewGif
@@ -493,11 +776,13 @@ function FigureRow({ figures }: { figures: DetailFigure[] }) {
               className="block h-full w-full object-contain"
             />
           ) : (
-            <img
+            <SmartImage
               src={main.src}
               alt={main.alt ?? main.caption ?? ""}
+              wrapClassName="w-full"
+              objectFit="contain"
               className="block h-auto w-full object-contain"
-              style={main.invert ? { filter: "invert(1)" } : undefined}
+              style={figureImageStyle(main)}
               loading="lazy"
             />
           )}
@@ -505,7 +790,7 @@ function FigureRow({ figures }: { figures: DetailFigure[] }) {
       </div>
 
       {(thumb.caption || main.caption) && (
-        <div className="relative mt-3 flex w-full items-start gap-3 lg:gap-0">
+        <div className="relative mt-4 flex w-full items-start gap-3 lg:gap-0">
           {thumb.caption && (
             <figcaption
               className={`shrink-0 lg:absolute lg:right-full lg:mr-3 xl:mr-4 ${captionClass}`}
@@ -541,11 +826,14 @@ function InViewGif({
     threshold: 0.35,
   });
   const [poster, setPoster] = useState<string | null>(null);
-  const [ratio, setRatio] = useState<number | null>(null);
+  const [failed, setFailed] = useState(false);
+  const probedRatio = useMediaDimensions(src);
 
   // Capture a still first frame so the image stays visible when off-screen
   useEffect(() => {
     let cancelled = false;
+    setFailed(false);
+    setPoster(null);
     const img = new Image();
     img.decoding = "async";
     img.onload = () => {
@@ -561,13 +849,15 @@ function InViewGif({
         }
         ctx.drawImage(img, 0, 0);
         setPoster(canvas.toDataURL("image/jpeg", 0.88));
-        setRatio(img.naturalWidth / img.naturalHeight);
       } catch {
         setPoster(src);
       }
     };
     img.onerror = () => {
-      if (!cancelled) setPoster(src);
+      if (!cancelled) {
+        setFailed(true);
+        setPoster(null);
+      }
     };
     img.src = src;
     return () => {
@@ -575,26 +865,31 @@ function InViewGif({
     };
   }, [src]);
 
-  const displaySrc = inView ? src : (poster ?? undefined);
+  const displaySrc = failed ? undefined : inView ? src : (poster ?? undefined);
+  const waiting = !failed && !displaySrc;
+  const aspectRatio = probedRatio ?? "16 / 9";
 
   return (
     <div
       ref={wrapRef}
-      className="w-full overflow-hidden rounded-2xl bg-white/[0.03]"
-      style={{ aspectRatio: ratio ? String(ratio) : "16 / 9" }}
+      className="relative w-full overflow-hidden rounded-2xl bg-white/[0.03]"
+      style={{ aspectRatio: String(aspectRatio), width: "100%" }}
     >
+      {(waiting || failed) && (
+        <LoadingMark
+          className="absolute inset-0 z-[1]"
+          posterSrc={src}
+          objectFit="contain"
+          showSpinner={waiting}
+        />
+      )}
       {displaySrc ? (
         <img
           ref={mediaRef}
           src={displaySrc}
           alt={alt ?? ""}
           className={className}
-          onLoad={(e) => {
-            const el = e.currentTarget;
-            if (el.naturalWidth > 0 && el.naturalHeight > 0) {
-              setRatio(el.naturalWidth / el.naturalHeight);
-            }
-          }}
+          onError={() => setFailed(true)}
         />
       ) : null}
     </div>
@@ -603,34 +898,71 @@ function InViewGif({
 
 function InViewVideo({
   src,
+  poster,
   className,
   mediaRef,
+  soundToggle = false,
 }: {
   src: string;
+  poster?: string;
   className?: string;
   mediaRef?: RefObject<HTMLImageElement | HTMLVideoElement | null>;
+  soundToggle?: boolean;
 }) {
   const { ref: wrapRef, inView } = useInView<HTMLDivElement>({
     once: false,
     threshold: 0.35,
+    rootMargin: "0px",
   });
   const localRef = useRef<HTMLVideoElement | null>(null);
+  const [status, setStatus] = useState<"loading" | "ready" | "error">(
+    "loading",
+  );
+  const [muted, setMuted] = useState(true);
+  const probedRatio = useVideoDimensions(src);
+
+  useEffect(() => {
+    setStatus("loading");
+    setMuted(true);
+  }, [src]);
+
+  const showVideo = inView && status === "ready";
 
   useEffect(() => {
     const video = localRef.current;
     if (!video) return;
-    video.muted = true;
-    video.defaultMuted = true;
+    video.muted = muted;
+    video.defaultMuted = muted;
     video.playsInline = true;
-    if (inView) {
+    if (showVideo) {
       void video.play().catch(() => {});
     } else {
       video.pause();
+      if (!inView) {
+        try {
+          video.currentTime = 0;
+        } catch {
+          /* ignore seek before metadata */
+        }
+      }
     }
-  }, [inView, src]);
+  }, [showVideo, inView, src, muted]);
+
+  const markReady = () => setStatus("ready");
+
+  const showFallback = status === "loading" || status === "error";
+  const aspectRatio = probedRatio ?? 16 / 9;
+  const ratioStyle: CSSProperties = {
+    aspectRatio: String(aspectRatio),
+    width: "100%",
+  };
 
   return (
-    <div ref={wrapRef} className="w-full">
+    <div
+      ref={wrapRef}
+      className="relative w-full overflow-hidden rounded-2xl bg-black"
+      style={ratioStyle}
+    >
       <video
         ref={(el) => {
           localRef.current = el;
@@ -643,46 +975,155 @@ function InViewVideo({
           }
         }}
         src={src}
-        className={className}
-        muted
+        poster={poster}
+        className={`absolute inset-0 z-0 h-full w-full transition-opacity duration-500 ${
+          className ?? "object-cover"
+        } ${showVideo ? "opacity-100" : "pointer-events-none opacity-0"}`}
+        muted={muted}
         loop
         playsInline
-        preload="metadata"
+        preload="auto"
         controls={false}
         disablePictureInPicture
+        onLoadedMetadata={markReady}
+        onLoadedData={markReady}
+        onCanPlay={markReady}
+        onError={() => setStatus("error")}
       />
+
+      {/* Poster stays visible until scrolled into view (icmd-style) */}
+      {poster ? (
+        <img
+          src={poster}
+          alt=""
+          aria-hidden
+          className={`absolute inset-0 z-[1] h-full w-full object-cover transition-opacity duration-500 ${
+            showVideo ? "pointer-events-none opacity-0" : "opacity-100"
+          }`}
+        />
+      ) : (
+        <div
+          className={`absolute inset-0 z-[1] bg-[#111] transition-opacity duration-500 ${
+            showVideo ? "pointer-events-none opacity-0" : "opacity-100"
+          }`}
+        />
+      )}
+
+      {inView && showFallback && (
+        <LoadingMark
+          className="pointer-events-none absolute inset-0 z-[2]"
+          showSpinner={status === "loading"}
+          label={status === "error" ? "Media unavailable" : "Loading video"}
+          posterSrc={poster}
+          objectFit="cover"
+        />
+      )}
+
+      {soundToggle && showVideo && (
+        <button
+          type="button"
+          onClick={() => setMuted((v) => !v)}
+          className="absolute bottom-3 right-3 z-[3] rounded-full border border-white/25 bg-black/55 px-3 py-1.5 text-[0.7rem] font-bold tracking-[0.04em] text-white backdrop-blur-sm transition-opacity hover:bg-black/75"
+          aria-label={muted ? "Unmute video" : "Mute video"}
+        >
+          {muted ? "开启声音" : "静音"}
+        </button>
+      )}
     </div>
   );
 }
 
-function FigureBlock({ figure }: { figure: DetailFigure }) {
+function figureImageStyle(figure: DetailFigure): CSSProperties | undefined {
+  const filters: string[] = [];
+  if (figure.grayscale) filters.push("grayscale(1)");
+  if (figure.invert) filters.push("invert(1)");
+  return filters.length ? { filter: filters.join(" ") } : undefined;
+}
+
+function FigureStack({ figures }: { figures: DetailFigure[] }) {
+  const nodes: ReactNode[] = [];
+  let i = 0;
+  while (i < figures.length) {
+    const fig = figures[i];
+    const next = figures[i + 1];
+    if (fig.row && next?.row) {
+      nodes.push(
+        <div
+          key={`${fig.src}__${next.src}`}
+          className="flex w-full items-start justify-between gap-4 sm:gap-5"
+        >
+          <FigureBlock figure={fig} flush className="w-[calc(50%-0.5rem)] sm:w-[calc(50%-0.625rem)]" />
+          <FigureBlock figure={next} flush className="w-[calc(50%-0.5rem)] sm:w-[calc(50%-0.625rem)]" />
+        </div>,
+      );
+      i += 2;
+      continue;
+    }
+    nodes.push(<FigureBlock key={fig.src} figure={fig} />);
+    i += 1;
+  }
+  return <div className="space-y-6 lg:space-y-8">{nodes}</div>;
+}
+
+function FigureBlock({
+  figure,
+  className = "",
+  flush = false,
+}: {
+  figure: DetailFigure;
+  className?: string;
+  /** Ignore scale width so the parent row controls sizing */
+  flush?: boolean;
+}) {
   const scale = figure.scale ?? 1;
+  const widthStyle =
+    !flush && scale < 1
+      ? { width: `${scale * 100}%`, maxWidth: "100%" as const }
+      : undefined;
+  const fixedFrame = Boolean(figure.aspect);
+  const coverFit = figure.fit === "cover" || fixedFrame;
+
   return (
-    <figure className="w-full">
+    <figure className={`min-w-0 ${flush ? "w-full" : "w-full"} ${className}`}>
       <div
         className="overflow-hidden rounded-2xl bg-transparent"
         style={{
-          width: scale < 1 ? `${scale * 100}%` : undefined,
-          maxWidth: "100%",
+          ...widthStyle,
+          ...(figure.aspect ? { aspectRatio: figure.aspect } : null),
         }}
       >
         {figure.video ? (
           <InViewVideo
             src={figure.src}
-            className="h-auto w-full object-contain"
+            className={
+              fixedFrame
+                ? "h-full w-full object-cover"
+                : "h-auto w-full object-contain"
+            }
+            soundToggle={Boolean(figure.soundToggle)}
           />
         ) : figure.gif ? (
           <InViewGif
             src={figure.src}
             alt={figure.alt ?? figure.caption ?? ""}
-            className="h-auto w-full object-contain"
+            className={
+              fixedFrame
+                ? "h-full w-full object-cover"
+                : "h-auto w-full object-contain"
+            }
           />
         ) : (
-          <img
+          <SmartImage
             src={figure.src}
             alt={figure.alt ?? figure.caption ?? ""}
-            className="h-auto w-full object-contain"
-            style={figure.invert ? { filter: "invert(1)" } : undefined}
+            wrapClassName={fixedFrame ? "h-full w-full" : "w-full"}
+            objectFit={coverFit ? "cover" : "contain"}
+            className={
+              fixedFrame
+                ? "h-full w-full object-cover"
+                : "h-auto w-full object-contain"
+            }
+            style={figureImageStyle(figure)}
             loading="lazy"
           />
         )}
@@ -690,7 +1131,7 @@ function FigureBlock({ figure }: { figure: DetailFigure }) {
       {figure.caption && (
         <figcaption
           className="mt-3 text-[0.7rem] font-bold italic leading-[1.5] tracking-[0.02em] text-white/55"
-          style={scale < 1 ? { maxWidth: `${scale * 100}%` } : undefined}
+          style={!flush && scale < 1 ? { maxWidth: `${scale * 100}%` } : undefined}
         >
           {figure.caption}
         </figcaption>
@@ -698,7 +1139,7 @@ function FigureBlock({ figure }: { figure: DetailFigure }) {
       {figure.body && (
         <p
           className="mt-3 text-[0.8rem] font-bold leading-[1.7] tracking-[0.035em] text-white sm:text-[0.88rem]"
-          style={scale < 1 ? { maxWidth: `${scale * 100}%` } : undefined}
+          style={!flush && scale < 1 ? { maxWidth: `${scale * 100}%` } : undefined}
         >
           {figure.body}
         </p>

@@ -16,7 +16,7 @@ export const chartLearningDetail: ProjectDetail = {
       label: "Keyword",
       value: "生成式 AI · 交互式图表学习 · 多模态知识图谱 · 金融教育",
     },
-    { label: "Time", value: "2024-2025" },
+    { label: "Time", value: "2023-2025" },
     { label: "Tutor", value: "王琦；李晓梅" },
   ],
   lead: [
