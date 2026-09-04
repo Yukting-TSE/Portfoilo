@@ -28,8 +28,6 @@ export type Project = {
   impact: string;
   images: [string, string];
   href?: string;
-  /** Bilibili BV id for case-study cover video */
-  bilibili?: string;
   detail?: ProjectDetail;
 };
 
@@ -59,7 +57,7 @@ export function findProject(id: string) {
 
 /** icmd-style Case Study detail; uses rich `detail` when present. */
 export function caseDetailFor(project: Project): ProjectDetail {
-  const detail: ProjectDetail = project.detail
+  return project.detail
     ? project.detail
     : {
         cover: {
@@ -85,21 +83,6 @@ export function caseDetailFor(project: Project): ProjectDetail {
           },
         ],
       };
-
-  if (!project.bilibili || !detail.cover) return detail;
-  // Never attach Bilibili when the case study already has a local cover video.
-  if (detail.cover.video) {
-    const { bilibili: _ignored, ...cover } = detail.cover;
-    return { ...detail, cover };
-  }
-
-  return {
-    ...detail,
-    cover: {
-      ...detail.cover,
-      bilibili: project.bilibili,
-    },
-  };
 }
 
 export const categories: ProjectCategory[] = [
@@ -153,7 +136,6 @@ export const categories: ProjectCategory[] = [
         impact:
           "以大数据分析系统技术在金融投教中的交互创新为研究基础，成果发表于 UIST Adjunct '25（DOI: 10.1145/3746058.3758384）。",
         images: img("chart-learning.jpg"),
-        bilibili: "BV1ZstV66E6A",
         detail: chartLearningDetail,
       },
       {
@@ -164,12 +146,11 @@ export const categories: ProjectCategory[] = [
         approach:
           "利用苹果智能配件内置传感器，结合 SDK 与蓝牙信号，将其转化为轻量级游戏控制器，与 iPhone / iPad 联动；以直观动作降低学习成本，拓展配件在射击、解谜等场景中的空间交互可能。",
         time: "2024",
-        role: "共同设计 · 谢玉婷；陈宁子",
+        role: "共同设计 · 交互原型开发 / 项目调研 · 谢玉婷；陈宁子",
         method: "物导向设计 · 游戏交互原型 · 传感器与空间计算",
         impact:
           "提出智能配件游戏化交互路径，重塑人与日常智能物件之间的具身联系，提升设备使用率与沉浸体验。",
         images: img("icmd.png"),
-        bilibili: "BV1fWtV63Ec4",
         detail: icmdDetail,
       },
       {
@@ -184,7 +165,6 @@ export const categories: ProjectCategory[] = [
         method: "信息可视化交互 · 文化遗产数字化",
         impact: "形成可检索、可阅读的古塔样式分析与可视化成果。",
         images: img("pagoda.png"),
-        bilibili: "BV1bf4y1876G",
         detail: pagodaDetail,
       },
     ],
@@ -234,7 +214,6 @@ export const categories: ProjectCategory[] = [
         method: "湿媒体 · 脑电波交互 · 音乐生成",
         impact: "承认并尊重植物的感知与话语权，创造跨物种情感谐振体验。",
         images: img("emotion-resonance.jpg"),
-        bilibili: "BV1hu411y7VG",
         detail: emotionResonanceDetail,
       },
       {
@@ -279,12 +258,11 @@ export const categories: ProjectCategory[] = [
           "个体行动轨迹被持续记录与景观化；当「被监控」成为日常，痕迹能否转化为可反思的身体书写，而非单向控制数据？",
         approach:
           "与戏剧《Hey Erica》合作，将人流与热成像痕迹转译为具有时间厚度的视觉结构，于南京保利大剧院呈现。",
-        time: "南京保利大剧院·金色音乐厅",
-        role: "共同设计 · 谢玉婷；冯圆；抓嘛 / 不散不肆剧社",
-        method: "跨媒体戏剧 · 轨迹可视化 · 监控批判",
+        time: "2020",
+        role: "新媒体交互开发与展览装置 · 谢玉婷",
+        method: "跨媒介剧场；行为轨迹可视化",
         impact: "把监控数据重新理解为可感知的身体书写，强化对可见性与自我意识的反思。",
         images: img("silent-trace.jpg"),
-        bilibili: "BV1GdtG6hEYV",
         detail: silentTraceDetail,
       },
       {
@@ -294,7 +272,7 @@ export const categories: ProjectCategory[] = [
           "大型沉浸式联展需要跨地点、跨媒介的交互技术支持，让观众真正「进入」叙事空间，连接数字未来与中国传统文化。",
         approach:
           "负责交互技术支持与开发，参与三地分篇章展出的机械装置、沉浸空间与互动体验（如阮咸五音激光等）。",
-        time: "南艺 520 毕业展演嘉年华",
+        time: "2022",
         role: "Media interaction-designer · 谢玉婷",
         method: "交互技术开发 · 沉浸式装置 · 激光/影像互动",
         impact: "支撑桃源幻境联展的互动体验落地，引导观众由好奇走向思考。",
@@ -338,7 +316,7 @@ export const categories: ProjectCategory[] = [
         approach:
           "以多媒体互动餐桌嵌入「中华五千年文明」叙事，将宏大历史转译为餐桌上的时间体验。",
         time: "酒店空间委托设计",
-        role: "多媒体交互设计",
+        role: "新媒体内容视频制作",
         method: "空间叙事 · 互动桌面 · 文化体验设计",
         impact: "使进餐过程成为可感知的东方文化时间轴体验。",
         images: img("hotel-table.jpg"),
@@ -351,8 +329,8 @@ export const categories: ProjectCategory[] = [
           "历史水岸面临「景观化而非生活化」：空间被保留，叙事功能与文化参与却被削弱。",
         approach:
           "以户外戏剧投影将扬州传统文化与数字影像结合，以非侵入方式激活夜间公共空间与场所记忆。",
-        time: "城市公共空间项目",
-        role: "投影戏剧 / 跨媒介设计",
+        time: "2021",
+        role: "投影新媒体视频制作",
         method: "户外投影 · 戏剧叙事 · 城市更新介入",
         impact: "让小秦淮从被观看的历史景观转为可参与的文化场景。",
         images: img("yangzhou-projection.jpg"),

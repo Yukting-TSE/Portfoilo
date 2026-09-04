@@ -15,7 +15,7 @@ export default defineConfig({
     strictPort: false,
     open: true,
     watch: {
-      ignored: [],
+      ignored: ["**/node_modules/**", "**/*.mp4"],
     },
   },
   preview: {

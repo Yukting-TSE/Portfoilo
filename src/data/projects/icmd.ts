@@ -6,12 +6,19 @@ const img = (filename: string) =>
 
 export const icmdDetail: ProjectDetail = {
   cover: {
-    src: publicUrl("images/projects/icmd.png"),
+    src: img("cover.mp4"),
+    poster: publicUrl("images/projects/icmd.png"),
     alt: "icmd^ 智能配件的游戏交互创新",
+    video: true,
+    soundToggle: true,
   },
   eyebrow: "Case Study",
   meta: [
     { label: "Co-designer", value: "谢玉婷；陈宁子" },
+    {
+      label: "Role",
+      value: "交互原型开发 · 项目调研",
+    },
     {
       label: "Keyword",
       value: "游戏交互创新 · 物导向设计 · 游戏交互原型 · 传感器与空间计算",
@@ -21,18 +28,25 @@ export const icmdDetail: ProjectDetail = {
   ],
   lead: [
     "icmd^是针对智能配件游戏化交互机制的创新性研究。该研究立足于智能配件产品交互形式单一的痛点——例如 Apple Pencil 仅限于屏幕交互。通过利用苹果系列智能配件内置的陀螺仪和加速度计，结合 SDK 与蓝牙等信号传输技术，实现与 iPhone、iPad 等移动设备的交互；结合直观交互形式降低用户学习成本，重构人与日常物品之间的联系。",
+    "主要负责交互原型开发与项目调研：梳理智能配件的传感能力与使用场景，并落地可玩的游戏化交互原型。",
   ],
   sections: [
     {
+      type: "part",
+      number: "01",
+      title: "Research Background",
+    },
+    {
       type: "columns",
-      heading: "Introduction",
-      align: "end",
+      align: "start",
       left: [
         {
           type: "prose",
+          title: "智能配件的游戏交互机遇",
           paragraphs: [
             "智能配件以不同方式塑造用户的数字产品体验，例如 AirPods 已成为智能手机用户不可或缺的组成部分。智能配件为突破传统控制器范式提供了充满前景的游戏交互机遇。通过整合空间计算能力并融入具身认知原理，未来游戏控制器设计将能提升用户的沉浸式游戏体验。",
             "个人智能配件是具备情境感知能力的电子设备，可通过有线或无线连接自主计算并与其他设备交换数据。这类配件专为 iPhone、iPad 等平台设计，通过多种传感器实现环境情境感知，从而提供扩展功能。这种交互能力对智能配件融入更广泛的物联网生态至关重要。",
+            "近年来，智能设备的发展重点在于将智能手机作为游戏控制器使用。同时，研究人员还探索将其作为沉浸式增强现实交互设备，通过熟悉的界面和精准的触控输入，开辟出多样化的交互技术与应用场景。(Arda, 2021; Rishi, 2020)",
           ],
         },
       ],
@@ -49,20 +63,9 @@ export const icmdDetail: ProjectDetail = {
       ],
     },
     {
-      type: "part",
-      number: "02",
-      title: "Research Background",
-    },
-    {
       type: "columns",
       align: "start",
       left: [
-        {
-          type: "prose",
-          paragraphs: [
-            "近年来，智能设备的发展重点在于将智能手机作为游戏控制器使用。同时，研究人员还探索将其作为沉浸式增强现实交互设备，通过熟悉的界面和精准的触控输入，开辟出多样化的交互技术与应用场景。(Arda, 2021; Rishi, 2020)",
-          ],
-        },
         {
           type: "prose",
           title: "智能配件的空间计算能力",
@@ -124,7 +127,7 @@ export const icmdDetail: ProjectDetail = {
     },
     {
       type: "part",
-      number: "03",
+      number: "02",
       title: "Potential and scalability",
     },
     {
@@ -191,7 +194,7 @@ export const icmdDetail: ProjectDetail = {
     },
     {
       type: "part",
-      number: "04",
+      number: "03",
       title: "Design Opportunities in Game Interaction",
     },
     {
@@ -244,7 +247,7 @@ export const icmdDetail: ProjectDetail = {
     },
     {
       type: "part",
-      number: "05",
+      number: "04",
       title: "Design innovation",
     },
     {
@@ -283,7 +286,7 @@ export const icmdDetail: ProjectDetail = {
     },
     {
       type: "part",
-      number: "06",
+      number: "05",
       title: "Design Output",
     },
     {

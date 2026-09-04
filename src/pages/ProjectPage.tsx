@@ -95,7 +95,7 @@ export function ProjectPage() {
   );
 }
 
-function CaseStudy({
+export function CaseStudy({
   title,
   detail,
 }: {
@@ -104,7 +104,17 @@ function CaseStudy({
 }) {
   const headline = detail.headline ?? title;
   const meta = detail.meta ?? [];
+  const services = detail.services
+    ? Array.isArray(detail.services)
+      ? detail.services
+      : [detail.services]
+    : [];
   const bodySections = detail.sections.filter((s) => s.type !== "meta");
+  const hasLead = detail.lead.length > 0;
+  const showRightMeta = services.length > 0 && !hasLead;
+
+  const metaRowClass =
+    "grid grid-cols-[7.5rem_minmax(0,1fr)] items-baseline gap-3 border-t border-white/25 py-3 text-[0.88rem] font-bold text-white last:border-b sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:text-[0.95rem]";
 
   return (
     <article className="pb-28">
@@ -124,10 +134,7 @@ function CaseStudy({
           {meta.length > 0 && (
             <dl className="mt-10 w-full max-w-xl sm:mt-12">
               {meta.map((item) => (
-                <div
-                  key={item.label}
-                  className="grid grid-cols-[7.5rem_minmax(0,1fr)] items-baseline gap-3 border-t border-white/25 py-3 text-[0.88rem] font-bold text-white last:border-b sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:text-[0.95rem]"
-                >
+                <div key={item.label} className={metaRowClass}>
                   <dt>{item.label}</dt>
                   <dd>{item.value}</dd>
                 </div>
@@ -135,49 +142,60 @@ function CaseStudy({
             </dl>
           )}
 
-          <div
-            className={`flex w-full max-w-xl flex-col text-white ${
-              meta.length > 0 ? "mt-10 sm:mt-12" : "mt-8"
-            }`}
-          >
-            <div className="space-y-5 text-[0.95rem] font-bold leading-[1.7] tracking-[0.035em] sm:text-[1.05rem]">
-              {detail.lead.map((p, i) => {
-                if (typeof p === "string") {
-                  return <p key={p.slice(0, 24)}>{p}</p>;
-                }
-                if ("muted" in p && p.muted) return null;
-                if ("link" in p) {
-                  return (
-                    <p key={`lead-link-${i}`}>
-                      {p.before}
-                      <a
-                        href={p.link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline underline-offset-4 transition-opacity hover:opacity-60"
-                      >
-                        {p.link.label}
-                      </a>
-                      {p.after}
-                    </p>
-                  );
-                }
-                return null;
-              })}
-            </div>
-            {detail.lead.some(
-              (p) => typeof p !== "string" && "muted" in p && p.muted,
-            ) && (
-              <div className="mt-auto space-y-2 pt-8 text-[0.72rem] font-normal leading-[1.65] tracking-[0.02em] text-white/70 sm:text-[0.78rem]">
+          {showRightMeta ? (
+            <dl className="mt-10 w-full max-w-xl sm:mt-12">
+              {services.map((item) => (
+                <div key={item.label} className={metaRowClass}>
+                  <dt>{item.label}</dt>
+                  <dd>{item.value}</dd>
+                </div>
+              ))}
+            </dl>
+          ) : (
+            <div
+              className={`flex w-full max-w-xl flex-col text-white ${
+                meta.length > 0 ? "mt-10 sm:mt-12" : "mt-8"
+              }`}
+            >
+              <div className="space-y-5 text-[0.95rem] font-bold leading-[1.7] tracking-[0.035em] sm:text-[1.05rem]">
                 {detail.lead.map((p, i) => {
-                  if (typeof p === "string" || !("muted" in p) || !p.muted) {
-                    return null;
+                  if (typeof p === "string") {
+                    return <p key={p.slice(0, 24)}>{p}</p>;
                   }
-                  return <p key={`lead-muted-${i}`}>{p.text}</p>;
+                  if ("muted" in p && p.muted) return null;
+                  if ("link" in p) {
+                    return (
+                      <p key={`lead-link-${i}`}>
+                        {p.before}
+                        <a
+                          href={p.link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline underline-offset-4 transition-opacity hover:opacity-60"
+                        >
+                          {p.link.label}
+                        </a>
+                        {p.after}
+                      </p>
+                    );
+                  }
+                  return null;
                 })}
               </div>
-            )}
-          </div>
+              {detail.lead.some(
+                (p) => typeof p !== "string" && "muted" in p && p.muted,
+              ) && (
+                <div className="mt-auto space-y-2 pt-8 text-[0.72rem] font-normal leading-[1.65] tracking-[0.02em] text-white/70 sm:text-[0.78rem]">
+                  {detail.lead.map((p, i) => {
+                    if (typeof p === "string" || !("muted" in p) || !p.muted) {
+                      return null;
+                    }
+                    return <p key={`lead-muted-${i}`}>{p.text}</p>;
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -203,186 +221,291 @@ function CaseStudy({
 }
 
 function CoverMedia({ cover }: { cover: DetailFigure }) {
-  // Local mp4 cover — never fall through to Bilibili.
   if (cover.video) {
     return <LocalCoverVideo cover={cover} />;
   }
 
-  if (!cover.bilibili) {
-    return (
-      <div className="overflow-hidden rounded-2xl">
-        <img
-          src={cover.src}
-          alt={cover.alt ?? ""}
-          className={
-            cover.fit === "natural"
-              ? "h-auto w-full"
-              : "aspect-video h-auto w-full object-cover"
-          }
-        />
-      </div>
-    );
-  }
-
-  return <BilibiliCover cover={cover} />;
+  return (
+    <div className="overflow-hidden rounded-2xl">
+      <img
+        src={cover.src}
+        alt={cover.alt ?? ""}
+        className={
+          cover.fit === "natural"
+            ? "h-auto w-full"
+            : "aspect-video h-auto w-full object-cover"
+        }
+      />
+    </div>
+  );
 }
 
-/** Local cover.mp4: poster until in view, then play with optional sound toggle. */
+function formatVideoClock(seconds: number) {
+  if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+/** Local cover.mp4: poster until play; scrub + play/pause + optional mute. */
 function LocalCoverVideo({ cover }: { cover: DetailFigure }) {
   const { ref, inView } = useInView<HTMLDivElement>({
     once: false,
-    threshold: 0.35,
-    rootMargin: "0px",
+    threshold: 0.1,
+    rootMargin: "120px 0px 120px 0px",
   });
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [ready, setReady] = useState(false);
+  const scrubbingRef = useRef(false);
+  const userPausedRef = useRef(false);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
-
-  const showVideo = inView && ready;
+  const [duration, setDuration] = useState(0);
+  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    setReady(false);
+    if (inView) setShouldLoad(true);
+  }, [inView]);
+
+  useEffect(() => {
+    setPlaying(false);
     setMuted(true);
+    setDuration(0);
+    setCurrent(0);
+    userPausedRef.current = false;
   }, [cover.src]);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+  }, [cover.src, shouldLoad]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const onMeta = () => {
+      if (Number.isFinite(video.duration)) setDuration(video.duration);
+    };
+    const onTime = () => {
+      if (!scrubbingRef.current) setCurrent(video.currentTime);
+    };
+    const onPlay = () => setPlaying(true);
+    const onPause = () => setPlaying(false);
+
+    video.addEventListener("loadedmetadata", onMeta);
+    video.addEventListener("durationchange", onMeta);
+    video.addEventListener("timeupdate", onTime);
+    video.addEventListener("play", onPlay);
+    video.addEventListener("playing", onPlay);
+    video.addEventListener("pause", onPause);
+
+    return () => {
+      video.removeEventListener("loadedmetadata", onMeta);
+      video.removeEventListener("durationchange", onMeta);
+      video.removeEventListener("timeupdate", onTime);
+      video.removeEventListener("play", onPlay);
+      video.removeEventListener("playing", onPlay);
+      video.removeEventListener("pause", onPause);
+    };
+  }, [cover.src, shouldLoad]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !shouldLoad) return;
+
+    if (!inView) {
+      video.pause();
+      setPlaying(false);
+      return;
+    }
+
     video.muted = muted;
     video.defaultMuted = muted;
-    video.playsInline = true;
-    if (showVideo) {
-      void video.play().catch(() => {});
-    } else {
-      video.pause();
-      if (!inView) {
-        try {
-          video.currentTime = 0;
-        } catch {
-          /* ignore */
-        }
-      }
+
+    if (userPausedRef.current) return;
+
+    const tryPlay = () => {
+      if (userPausedRef.current) return;
+      void video.play().catch(() => {
+        /* autoplay may be blocked; tap-to-play fallback handles it */
+      });
+    };
+
+    tryPlay();
+    video.addEventListener("canplay", tryPlay);
+    video.addEventListener("loadeddata", tryPlay);
+    return () => {
+      video.removeEventListener("canplay", tryPlay);
+      video.removeEventListener("loadeddata", tryPlay);
+    };
+  }, [inView, muted, cover.src, shouldLoad]);
+
+  const playVideo = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    userPausedRef.current = false;
+    video.muted = muted;
+    video.defaultMuted = muted;
+    void video.play().catch(() => {});
+  };
+
+  const pauseVideo = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    userPausedRef.current = true;
+    video.pause();
+  };
+
+  const togglePlay = () => {
+    if (playing) pauseVideo();
+    else playVideo();
+  };
+
+  const seekTo = (ratio: number) => {
+    const video = videoRef.current;
+    if (!video || !Number.isFinite(video.duration) || video.duration <= 0) return;
+    const next = Math.min(Math.max(ratio, 0), 1) * video.duration;
+    try {
+      video.currentTime = next;
+    } catch {
+      /* ignore seek errors while buffering */
     }
-  }, [showVideo, inView, muted, cover.src]);
+    setCurrent(next);
+  };
 
   const fitClass =
     cover.fit === "natural"
       ? "h-auto w-full object-contain"
-      : "h-full w-full object-cover";
+      : "absolute inset-0 z-0 h-full w-full object-cover";
+  const isNatural = cover.fit === "natural";
+  const showPoster = !playing;
+  const progress = duration > 0 ? current / duration : 0;
+  const posterSrc = cover.poster;
 
   return (
     <div
       ref={ref}
       className={
-        cover.fit === "natural"
+        isNatural
           ? "relative w-full overflow-hidden rounded-2xl bg-black"
           : "relative aspect-video w-full overflow-hidden rounded-2xl bg-black"
       }
     >
       <video
         ref={videoRef}
-        src={cover.src}
-        poster={cover.poster}
-        className={`absolute inset-0 z-0 transition-opacity duration-500 ${fitClass} ${
-          showVideo ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
+        src={shouldLoad ? cover.src : undefined}
+        poster={posterSrc}
+        className={fitClass}
         muted={muted}
+        autoPlay
         loop
         playsInline
-        preload="auto"
+        preload={shouldLoad ? "auto" : "none"}
         controls={false}
         disablePictureInPicture
-        onLoadedData={() => setReady(true)}
-        onCanPlay={() => setReady(true)}
-        onError={() => setReady(false)}
       />
 
-      <img
-        src={cover.poster ?? cover.src}
-        alt={cover.alt ?? ""}
-        className={`absolute inset-0 z-[1] h-full w-full object-cover transition-opacity duration-500 ${
-          showVideo ? "pointer-events-none opacity-0" : "opacity-100"
-        }`}
-      />
-
-      {inView && !ready && (
-        <LoadingMark
-          className="pointer-events-none absolute inset-0 z-[2]"
-          label="Loading video"
-          posterSrc={cover.poster}
-          objectFit="cover"
+      {showPoster && posterSrc && (
+        <img
+          src={posterSrc}
+          alt={cover.alt ?? ""}
+          className={
+            isNatural
+              ? "absolute inset-0 z-[1] h-full w-full object-contain"
+              : "absolute inset-0 z-[1] h-full w-full object-cover"
+          }
         />
       )}
 
-      {cover.soundToggle && showVideo && (
+      {showPoster && inView && (
         <button
           type="button"
-          onClick={() => setMuted((v) => !v)}
-          className="absolute bottom-3 right-3 z-[3] rounded-full border border-white/25 bg-black/55 px-3 py-1.5 text-[0.7rem] font-bold tracking-[0.04em] text-white backdrop-blur-sm transition-opacity hover:bg-black/75"
-          aria-label={muted ? "Unmute video" : "Mute video"}
+          className="absolute inset-0 z-[2] flex items-center justify-center bg-black/20"
+          aria-label="播放视频"
+          onClick={playVideo}
         >
-          {muted ? "开启声音" : "静音"}
+          <span className="rounded-full border border-white/30 bg-black/55 px-4 py-2 text-[0.75rem] font-bold tracking-[0.06em] text-white backdrop-blur-sm">
+            播放
+          </span>
         </button>
       )}
-    </div>
-  );
-}
 
-function BilibiliCover({ cover }: { cover: DetailFigure }) {
-  const { ref, inView } = useInView<HTMLDivElement>({
-    once: false,
-    threshold: 0.35,
-    rootMargin: "0px",
-  });
-  const [iframeReady, setIframeReady] = useState(false);
-
-  useEffect(() => {
-    if (!cover.bilibili) return;
-    setIframeReady(false);
-    const t = window.setTimeout(() => setIframeReady(true), 2800);
-    return () => window.clearTimeout(t);
-  }, [cover.bilibili]);
-
-  const playerSrc = `https://player.bilibili.com/player.html?isOutside=true&bvid=${encodeURIComponent(
-    cover.bilibili ?? "",
-  )}&page=1&autoplay=1&muted=1&danmaku=0&high_quality=1&loop=1`;
-
-  const showVideo = inView && iframeReady;
-  const showLoading = inView && !iframeReady;
-
-  return (
-    <div
-      ref={ref}
-      className="relative aspect-video w-full overflow-hidden rounded-2xl bg-black"
-    >
-      <iframe
-        key={cover.bilibili}
-        src={playerSrc}
-        title={cover.alt ?? "Bilibili video"}
-        className={`absolute inset-0 z-0 h-full w-full border-0 transition-opacity duration-500 ${
-          showVideo ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
-        allow="autoplay; fullscreen; picture-in-picture"
-        allowFullScreen
-        scrolling="no"
-        onLoad={() => setIframeReady(true)}
-      />
-
-      <img
-        src={cover.poster ?? cover.src}
-        alt={cover.alt ?? ""}
-        className={`absolute inset-0 z-[1] h-full w-full object-cover transition-opacity duration-500 ${
-          showVideo ? "pointer-events-none opacity-0" : "opacity-100"
-        }`}
-      />
-
-      {showLoading && (
-        <LoadingMark
-          className="pointer-events-none absolute inset-0 z-[2]"
-          label="Loading video"
-          posterSrc={cover.poster ?? cover.src}
-          objectFit="cover"
+      {playing && (
+        <button
+          type="button"
+          className="absolute inset-0 z-[2] cursor-pointer bg-transparent"
+          aria-label="暂停视频"
+          onClick={pauseVideo}
         />
+      )}
+
+      {inView && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[3] bg-gradient-to-t from-black/70 via-black/35 to-transparent px-3 pb-3 pt-10 sm:px-4 sm:pb-4">
+          <div className="pointer-events-auto flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              onClick={togglePlay}
+              className="shrink-0 rounded-full border border-white/25 bg-black/55 px-3 py-1.5 text-[0.7rem] font-bold tracking-[0.04em] text-white backdrop-blur-sm transition-opacity hover:bg-black/75"
+              aria-label={playing ? "暂停" : "播放"}
+            >
+              {playing ? "暂停" : "播放"}
+            </button>
+            <span className="min-w-[2.4rem] text-[0.65rem] font-bold tabular-nums tracking-[0.02em] text-white/80">
+              {formatVideoClock(current)}
+            </span>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.001}
+              value={Number.isFinite(progress) ? progress : 0}
+              aria-label="视频进度"
+              className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-white/25 accent-white [&::-moz-range-thumb]:h-3.5 [&::-moz-range-thumb]:w-3.5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-white [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white"
+              onPointerDown={() => {
+                scrubbingRef.current = true;
+              }}
+              onPointerUp={() => {
+                scrubbingRef.current = false;
+              }}
+              onPointerCancel={() => {
+                scrubbingRef.current = false;
+              }}
+              onChange={(e) => {
+                seekTo(Number(e.target.value));
+              }}
+            />
+            <span className="min-w-[2.4rem] text-right text-[0.65rem] font-bold tabular-nums tracking-[0.02em] text-white/80">
+              {formatVideoClock(duration)}
+            </span>
+            {cover.soundToggle && (
+              <button
+                type="button"
+                onClick={() => {
+                  const video = videoRef.current;
+                  const next = !muted;
+                  setMuted(next);
+                  if (video) {
+                    video.muted = next;
+                    video.defaultMuted = next;
+                    if (!userPausedRef.current) {
+                      void video.play().catch(() => {});
+                    }
+                  }
+                }}
+                className="shrink-0 rounded-full border border-white/25 bg-black/55 px-3 py-1.5 text-[0.7rem] font-bold tracking-[0.04em] text-white backdrop-blur-sm transition-opacity hover:bg-black/75"
+                aria-label={muted ? "Unmute video" : "Mute video"}
+              >
+                {muted ? "开启声音" : "静音"}
+              </button>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
@@ -766,7 +889,8 @@ function FigureRow({ figures }: { figures: DetailFigure[] }) {
           {main.video ? (
             <InViewVideo
               src={main.src}
-              className="block h-auto w-full object-contain"
+              poster={main.poster}
+              className="object-contain"
               soundToggle={Boolean(main.soundToggle)}
             />
           ) : main.gif ? (
@@ -909,61 +1033,68 @@ function InViewVideo({
   mediaRef?: RefObject<HTMLImageElement | HTMLVideoElement | null>;
   soundToggle?: boolean;
 }) {
-  const { ref: wrapRef, inView } = useInView<HTMLDivElement>({
-    once: false,
-    threshold: 0.35,
-    rootMargin: "0px",
-  });
   const localRef = useRef<HTMLVideoElement | null>(null);
-  const [status, setStatus] = useState<"loading" | "ready" | "error">(
-    "loading",
-  );
+  const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false);
   const [muted, setMuted] = useState(true);
   const probedRatio = useVideoDimensions(src);
 
   useEffect(() => {
-    setStatus("loading");
+    setReady(false);
+    setFailed(false);
     setMuted(true);
   }, [src]);
-
-  const showVideo = inView && status === "ready";
 
   useEffect(() => {
     const video = localRef.current;
     if (!video) return;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+  }, [src]);
+
+  useEffect(() => {
+    const video = localRef.current;
+    if (!video || !ready || failed) return;
     video.muted = muted;
     video.defaultMuted = muted;
-    video.playsInline = true;
-    if (showVideo) {
+    const tryPlay = () => {
       void video.play().catch(() => {});
-    } else {
-      video.pause();
-      if (!inView) {
-        try {
-          video.currentTime = 0;
-        } catch {
-          /* ignore seek before metadata */
-        }
-      }
-    }
-  }, [showVideo, inView, src, muted]);
+    };
+    tryPlay();
+    video.addEventListener("canplay", tryPlay);
+    return () => video.removeEventListener("canplay", tryPlay);
+  }, [ready, muted, src, failed]);
 
-  const markReady = () => setStatus("ready");
-
-  const showFallback = status === "loading" || status === "error";
-  const aspectRatio = probedRatio ?? 16 / 9;
-  const ratioStyle: CSSProperties = {
-    aspectRatio: String(aspectRatio),
-    width: "100%",
+  const toggleSound = () => {
+    const video = localRef.current;
+    if (!video) return;
+    const nextMuted = !muted;
+    setMuted(nextMuted);
+    video.muted = nextMuted;
+    video.defaultMuted = nextMuted;
+    void video.play().catch(() => {});
   };
+
+  const markReady = () => {
+    setFailed(false);
+    setReady(true);
+  };
+
+  const fitClass = className?.includes("object-contain")
+    ? "object-contain"
+    : "object-cover";
+  const aspectRatio = probedRatio ?? 16 / 9;
 
   return (
     <div
-      ref={wrapRef}
       className="relative w-full overflow-hidden rounded-2xl bg-black"
-      style={ratioStyle}
+      style={{ aspectRatio: String(aspectRatio), width: "100%" }}
     >
       <video
+        key={src}
         ref={(el) => {
           localRef.current = el;
           if (mediaRef) {
@@ -975,11 +1106,10 @@ function InViewVideo({
           }
         }}
         src={src}
-        poster={poster}
-        className={`absolute inset-0 z-0 h-full w-full transition-opacity duration-500 ${
-          className ?? "object-cover"
-        } ${showVideo ? "opacity-100" : "pointer-events-none opacity-0"}`}
-        muted={muted}
+        {...(poster ? { poster } : {})}
+        className={`absolute inset-0 z-0 h-full w-full ${fitClass}`}
+        muted
+        autoPlay
         loop
         playsInline
         preload="auto"
@@ -988,42 +1118,35 @@ function InViewVideo({
         onLoadedMetadata={markReady}
         onLoadedData={markReady}
         onCanPlay={markReady}
-        onError={() => setStatus("error")}
+        onPlaying={markReady}
+        onError={() => setFailed(true)}
       />
 
-      {/* Poster stays visible until scrolled into view (icmd-style) */}
-      {poster ? (
-        <img
-          src={poster}
-          alt=""
-          aria-hidden
-          className={`absolute inset-0 z-[1] h-full w-full object-cover transition-opacity duration-500 ${
-            showVideo ? "pointer-events-none opacity-0" : "opacity-100"
-          }`}
-        />
-      ) : (
-        <div
-          className={`absolute inset-0 z-[1] bg-[#111] transition-opacity duration-500 ${
-            showVideo ? "pointer-events-none opacity-0" : "opacity-100"
-          }`}
-        />
-      )}
-
-      {inView && showFallback && (
+      {!ready && !failed && (
         <LoadingMark
-          className="pointer-events-none absolute inset-0 z-[2]"
-          showSpinner={status === "loading"}
-          label={status === "error" ? "Media unavailable" : "Loading video"}
+          className="pointer-events-none absolute inset-0 z-[1]"
+          showSpinner
+          label="Loading video"
           posterSrc={poster}
-          objectFit="cover"
+          objectFit={fitClass === "object-contain" ? "contain" : "cover"}
         />
       )}
 
-      {soundToggle && showVideo && (
+      {failed && (
+        <LoadingMark
+          className="pointer-events-none absolute inset-0 z-[1]"
+          showSpinner={false}
+          label="Media unavailable"
+          posterSrc={poster}
+          objectFit={fitClass === "object-contain" ? "contain" : "cover"}
+        />
+      )}
+
+      {soundToggle && ready && !failed && (
         <button
           type="button"
-          onClick={() => setMuted((v) => !v)}
-          className="absolute bottom-3 right-3 z-[3] rounded-full border border-white/25 bg-black/55 px-3 py-1.5 text-[0.7rem] font-bold tracking-[0.04em] text-white backdrop-blur-sm transition-opacity hover:bg-black/75"
+          onClick={toggleSound}
+          className="absolute bottom-3 right-3 z-[2] rounded-full border border-white/25 bg-black/55 px-3 py-1.5 text-[0.7rem] font-bold tracking-[0.04em] text-white backdrop-blur-sm transition-opacity hover:bg-black/75"
           aria-label={muted ? "Unmute video" : "Mute video"}
         >
           {muted ? "开启声音" : "静音"}
@@ -1095,10 +1218,11 @@ function FigureBlock({
         {figure.video ? (
           <InViewVideo
             src={figure.src}
+            poster={figure.poster}
             className={
               fixedFrame
-                ? "h-full w-full object-cover"
-                : "h-auto w-full object-contain"
+                ? "object-cover"
+                : "object-contain"
             }
             soundToggle={Boolean(figure.soundToggle)}
           />

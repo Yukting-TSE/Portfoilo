@@ -6,7 +6,7 @@ type Props = {
 };
 
 const footerLinks = [
-  { label: "About", hash: "about" },
+  { label: "About", to: "/about" },
   { label: "Works", hash: "works" },
   { label: "Contact", hash: "contact" },
 ];
@@ -82,8 +82,12 @@ export function Footer({ onOpenContact }: Props) {
             <nav className="flex flex-wrap gap-x-5 gap-y-2" aria-label="Footer">
               {footerLinks.map((link) => (
                 <Link
-                  key={link.hash}
-                  to={{ pathname: "/", hash: `#${link.hash}` }}
+                  key={link.label}
+                  to={
+                    "to" in link && link.to
+                      ? link.to
+                      : { pathname: "/", hash: `#${link.hash}` }
+                  }
                   className="transition-opacity duration-200 hover:opacity-55"
                 >
                   {link.label}

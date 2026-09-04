@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { profile } from "../data/profile";
 import { useTypewriter } from "../hooks/useTypewriter";
 import { useVideoScrub } from "../hooks/useVideoScrub";
@@ -77,15 +78,29 @@ export function Hero() {
           }`}
         >
           {profile.pills.map((pill) => {
-            const isPdf = pill.href.toLowerCase().endsWith(".pdf");
+            const className =
+              "mb-[0.4em] mr-[0.2em] inline-flex items-center justify-center whitespace-nowrap rounded-full border border-white/25 bg-white/55 px-4 py-[0.35em] text-[13px] text-[var(--black)] backdrop-blur-md transition-colors duration-200 hover:bg-white/80 sm:px-5 sm:text-[15px]";
+            const isExternal =
+              pill.href.startsWith("http") ||
+              pill.href.toLowerCase().endsWith(".pdf");
+            const isRoute = pill.href.startsWith("/") && !isExternal;
+
+            if (isRoute) {
+              return (
+                <Link key={pill.label} to={pill.href} className={className}>
+                  {pill.label}
+                </Link>
+              );
+            }
+
             return (
               <a
                 key={pill.label}
                 href={pill.href}
-                {...(isPdf
+                {...(isExternal
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
-                className="mb-[0.4em] mr-[0.2em] inline-flex items-center justify-center whitespace-nowrap rounded-full border border-white/25 bg-white/55 px-4 py-[0.35em] text-[13px] text-[var(--black)] backdrop-blur-md transition-colors duration-200 hover:bg-white/80 sm:px-5 sm:text-[15px]"
+                className={className}
               >
                 {pill.label}
               </a>

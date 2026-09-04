@@ -6,8 +6,11 @@ const img = (filename: string) =>
 
 export const chartLearningDetail: ProjectDetail = {
   cover: {
-    src: publicUrl("images/projects/chart-learning.jpg"),
+    src: img("cover.mp4"),
+    poster: publicUrl("images/projects/chart-learning.jpg"),
     alt: "Designing Interactive Chart Learning Tools with Generative AI",
+    video: true,
+    soundToggle: true,
   },
   eyebrow: "Case Study",
   meta: [

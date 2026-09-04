@@ -12,7 +12,7 @@ const links = [
   { label: "人机交互", hash: "cat-hci" },
   { label: "媒体艺术", hash: "cat-media" },
   { label: "商业合作", hash: "cat-commercial" },
-  { label: "About ME", hash: "about" },
+  { label: "About ME", to: "/about" },
 ];
 
 export function Navigation({
@@ -59,22 +59,45 @@ export function Navigation({
         className="hidden items-center gap-7 md:flex lg:gap-9"
         aria-label="Primary"
       >
-        {links.map((l) => (
-          <Link
-            key={l.hash}
-            to={{ pathname: "/", hash: `#${l.hash}` }}
-            tabIndex={faded ? -1 : undefined}
-            className="group relative text-[13px] tracking-[0.04em] transition-all duration-300 hover:-translate-y-0.5 lg:text-[14px]"
-          >
-            <span className="transition-opacity duration-300 group-hover:opacity-45">
-              {l.label}
-            </span>
-            <span
-              className="pointer-events-none absolute -bottom-1 left-0 h-px w-0 bg-[var(--fg)] transition-all duration-300 group-hover:w-full"
-              aria-hidden
-            />
-          </Link>
-        ))}
+        {links.map((l) => {
+          const className =
+            "group relative text-[13px] tracking-[0.04em] transition-all duration-300 hover:-translate-y-0.5 lg:text-[14px]";
+          const label = (
+            <>
+              <span className="transition-opacity duration-300 group-hover:opacity-45">
+                {l.label}
+              </span>
+              <span
+                className="pointer-events-none absolute -bottom-1 left-0 h-px w-0 bg-[var(--fg)] transition-all duration-300 group-hover:w-full"
+                aria-hidden
+              />
+            </>
+          );
+
+          if ("to" in l && l.to) {
+            return (
+              <Link
+                key={l.label}
+                to={l.to}
+                tabIndex={faded ? -1 : undefined}
+                className={className}
+              >
+                {label}
+              </Link>
+            );
+          }
+
+          return (
+            <Link
+              key={l.hash}
+              to={{ pathname: "/", hash: `#${l.hash}` }}
+              tabIndex={faded ? -1 : undefined}
+              className={className}
+            >
+              {label}
+            </Link>
+          );
+        })}
       </nav>
 
       <button

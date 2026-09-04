@@ -9,7 +9,7 @@ const items = [
   { label: "人机交互", hash: "cat-hci" },
   { label: "媒体艺术", hash: "cat-media" },
   { label: "商业合作", hash: "cat-commercial" },
-  { label: "About ME", hash: "about" },
+  { label: "About ME", to: "/about" },
 ];
 
 export function MobileMenu({ open, onClose }: Props) {
@@ -23,19 +23,38 @@ export function MobileMenu({ open, onClose }: Props) {
       }`}
       aria-hidden={!open}
     >
-      {items.map((item, i) => (
-        <Link
-          key={item.label}
-          to={{ pathname: "/", hash: `#${item.hash}` }}
-          className={`text-[32px] font-medium text-[var(--white)] no-underline transition-all duration-500 ${
-            open ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
-          }`}
-          style={{ transitionDelay: open ? `${120 + i * 60}ms` : "0ms" }}
-          onClick={onClose}
-        >
-          {item.label}
-        </Link>
-      ))}
+      {items.map((item, i) => {
+        const className = `text-[32px] font-medium text-[var(--white)] no-underline transition-all duration-500 ${
+          open ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
+        }`;
+        const style = { transitionDelay: open ? `${120 + i * 60}ms` : "0ms" };
+
+        if ("to" in item && item.to) {
+          return (
+            <Link
+              key={item.label}
+              to={item.to}
+              className={className}
+              style={style}
+              onClick={onClose}
+            >
+              {item.label}
+            </Link>
+          );
+        }
+
+        return (
+          <Link
+            key={item.label}
+            to={{ pathname: "/", hash: `#${item.hash}` }}
+            className={className}
+            style={style}
+            onClick={onClose}
+          >
+            {item.label}
+          </Link>
+        );
+      })}
     </div>
   );
 }

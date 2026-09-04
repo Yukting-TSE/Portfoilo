@@ -29,8 +29,6 @@ export type DetailFigure = {
   aspect?: string;
   /** Optional poster image when `video` is true (cover hero) */
   poster?: string;
-  /** Bilibili BV id — poster stays as src until scrolled into view */
-  bilibili?: string;
 };
 
 export type DetailTable = {
@@ -130,8 +128,8 @@ export type ProjectDetail = {
   secondaryTitle?: string;
   /** Left meta rows (Client / Year / Industry style) */
   meta?: DetailMetaItem[];
-  /** Right meta row aligned with the first left meta row */
-  services?: DetailMetaItem;
+  /** Right meta row(s) aligned with the left meta column */
+  services?: DetailMetaItem | DetailMetaItem[];
   lead: DetailLeadParagraph[];
   sections: DetailSection[];
   closing?: string;

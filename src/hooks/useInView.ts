@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 type Options = {
   threshold?: number | number[];
@@ -7,14 +7,14 @@ type Options = {
 };
 
 export function useInView<T extends HTMLElement = HTMLElement>(
-  options: Options = {}
+  options: Options = {},
 ) {
   const { threshold = 0.15, rootMargin = "0px 0px -8% 0px", once = true } =
     options;
   const ref = useRef<T | null>(null);
   const [inView, setInView] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
 
@@ -32,7 +32,7 @@ export function useInView<T extends HTMLElement = HTMLElement>(
           setInView(false);
         }
       },
-      { threshold, rootMargin }
+      { threshold, rootMargin },
     );
 
     io.observe(el);

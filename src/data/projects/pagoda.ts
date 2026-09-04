@@ -6,9 +6,11 @@ const img = (filename: string) =>
 
 export const pagodaDetail: ProjectDetail = {
   cover: {
-    src: publicUrl("images/projects/pagoda.png"),
+    src: img("cover.mp4"),
+    poster: publicUrl("images/projects/pagoda.png"),
     alt: "中国现存古塔建筑样式分析",
-    fit: "natural",
+    video: true,
+    soundToggle: true,
   },
   eyebrow: "Case Study",
   meta: [
@@ -245,22 +247,25 @@ export const pagodaDetail: ProjectDetail = {
       columns: 3,
       figures: [
         {
-          src: img("fig-anim-1.gif"),
+          src: img("fig-anim-1.mp4"),
           caption: "① 数据筛选",
-          body: "点击左下角三个类别进行信息筛选，视图刷新为对应古塔集合，便于按材质、高度或种类浏览。",
-          gif: true,
+          body: "按材质、高度或种类筛选后，被选中的信息与图表会重新整合，组成一座新的古塔形态。",
+          video: true,
+          aspect: "9 / 16",
         },
         {
-          src: img("fig-anim-2.gif"),
+          src: img("fig-anim-2.mp4"),
           caption: "② 年代细节",
-          body: "向左滑动后，图表转换为柱状图，数值差异更直观，便于比较各朝代现存古塔数量。",
-          gif: true,
+          body: "向左滑动进入年代视图：数据转为柱状图，各朝代现存数量高低一目了然。",
+          video: true,
+          aspect: "9 / 16",
         },
         {
-          src: img("fig-anim-3.gif"),
+          src: img("fig-anim-3.mp4"),
           caption: "③ AR 展示",
-          body: "打开详情页可 360° 查看古塔模型；手机扫描后可在真实环境中观看 AR 模型。",
-          gif: true,
+          body: "详情页可 360° 旋转查看古塔模型；用手机扫描即可在真实场景中唤醒 AR。",
+          video: true,
+          aspect: "9 / 16",
         },
       ],
     },
