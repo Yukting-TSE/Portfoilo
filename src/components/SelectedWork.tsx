@@ -7,9 +7,15 @@ import { motion } from "../motion/motionConfig";
 
 function methodTags(method: string) {
   return (method ?? "")
-    .split(/[·•|,/；;]/)
+    .split(/[·•|,/；;，、]+/)
     .map((s) => s.trim())
     .filter(Boolean);
+}
+
+function projectKeywordTags(project: Project) {
+  const fromDetail = project.detail?.meta?.find((m) => m.label === "Keyword")
+    ?.value;
+  return methodTags(fromDetail ?? project.method);
 }
 
 function useDesktopScale() {
@@ -178,7 +184,7 @@ function ProjectRow({ project }: { project: Project }) {
   const [focused, setFocused] = useState(false);
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null);
   const desktopScale = useDesktopScale();
-  const tags = methodTags(project.method);
+  const tags = projectKeywordTags(project);
   const summary = `${project.challenge} ${project.approach}`.trim();
   const image = project.images[0];
   const scale = desktopScale ? (focused ? 1 : 0.85) : 1;
