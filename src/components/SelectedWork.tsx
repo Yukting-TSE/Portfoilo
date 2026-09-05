@@ -215,9 +215,9 @@ function ProjectRow({ project }: { project: Project }) {
 
   return (
     <article ref={ref} className="project-row">
-      <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-[minmax(0,32%)_minmax(0,68%)] lg:gap-10 xl:gap-14">
+      <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,32%)_minmax(0,68%)] lg:gap-10 xl:gap-14">
         <div
-          className="flex min-h-0 flex-col justify-between gap-8 transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] lg:min-h-full lg:gap-10 lg:py-1"
+          className="flex min-h-0 flex-col justify-between gap-8 transition-colors duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] lg:gap-10 lg:py-1"
           style={{
             color:
               focused || !desktopScale ? "var(--fg)" : "rgba(245,245,242,0.32)",
@@ -244,7 +244,7 @@ function ProjectRow({ project }: { project: Project }) {
           </p>
         </div>
 
-        <div className="relative aspect-video w-full">
+        <div className="relative aspect-video w-full shrink-0 self-start overflow-hidden rounded-2xl">
           <Link
             to={href}
             className="absolute inset-0 block cursor-none overflow-hidden rounded-2xl will-change-transform"
@@ -266,7 +266,7 @@ function ProjectRow({ project }: { project: Project }) {
               loading="lazy"
               width={1600}
               height={900}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover object-center"
             />
             {tags.length > 0 && (
               <div className="pointer-events-none absolute left-3 top-3 z-[2] flex max-w-[90%] flex-wrap gap-2 sm:left-4 sm:top-4">
